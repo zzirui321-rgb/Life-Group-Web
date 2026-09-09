@@ -1,0 +1,16 @@
+/* Member history: shared rhythm for alumni and former members. */
+.member-history{padding:8px 0 24px}
+.history-group+.history-group{margin-top:32px}
+.history-heading{display:flex;align-items:baseline;gap:12px;margin:12px 0 0;font-size:20px;font-weight:600}
+.history-heading span{font-size:12px;letter-spacing:.1em;font-weight:400;color:#607269}
+.history-list{list-style:none;margin:12px 0 0;padding:0}
+.history-row{display:grid;grid-template-columns:100px 170px minmax(0,1fr);gap:20px;align-items:baseline;padding:18px 0;border-top:1px solid #d8e1db;font-size:15px;line-height:1.7}
+.history-name{font-size:17px;font-weight:600;color:#203d30}
+.history-name a{text-decoration:none;border-bottom:1px solid #94aa9b;padding-bottom:2px}
+.history-name a:hover{color:#437b52}
+.history-name a:focus-visible{outline:2px solid #437b52;outline-offset:4px}
+.history-role{color:#607269;font-size:14px}
+.history-role small{display:block;font-size:13px}
+.history-detail{min-width:0;overflow-wrap:anywhere;color:#34483d}
+.history-detail small{display:block;color:#607269;font-size:14px;margin-top:3px}
+@media(max-width:680px){.history-row{grid-template-columns:80px minmax(0,1fr);gap:4px 16px;padding:16px 0}.history-role{text-align:right}.history-role small{display:inline;margin-left:8px}.history-detail{grid-column:1/-1;margin-top:4px}.history-heading span{font-size:11px}}
