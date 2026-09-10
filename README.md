@@ -1,6 +1,6 @@
 # LiFE Lab Website
 
-Official website for the **LiFE Lab** (Light, Field, and Electron Research Group).
+Official website for the **LiFE Lab** (Light interaction with Free Electron Research Group).
 
 🌐 **Website**: [https://life-group.cn](https://life-group.cn)
 
