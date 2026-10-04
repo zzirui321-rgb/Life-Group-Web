@@ -1,6 +1,7 @@
 (() => {
   const header = document.querySelector('.header');
   if (!header) return;
+  const english = document.documentElement.lang.startsWith('en');
   const motion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
 
   // 1. Inject Mobile Nav Toggle Button if not already in markup
@@ -9,7 +10,7 @@
   if (!navToggle && nav) {
     navToggle = document.createElement('button');
     navToggle.className = 'nav-toggle';
-    navToggle.setAttribute('aria-label', '切换主导航');
+    navToggle.setAttribute('aria-label', english ? 'Toggle navigation' : '切换主导航');
     navToggle.setAttribute('aria-expanded', 'false');
     navToggle.innerHTML = '<span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span><span class="nav-toggle-bar"></span>';
     header.appendChild(navToggle);
@@ -65,8 +66,8 @@
   if (!backToTop) {
     backToTop = document.createElement('button');
     backToTop.className = 'back-to-top';
-    backToTop.setAttribute('aria-label', '回到顶部');
-    backToTop.setAttribute('title', '回到顶部');
+    backToTop.setAttribute('aria-label', english ? 'Back to top' : '回到顶部');
+    backToTop.setAttribute('title', english ? 'Back to top' : '回到顶部');
     backToTop.innerHTML = '↑';
     document.body.appendChild(backToTop);
   }
