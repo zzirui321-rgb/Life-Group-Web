@@ -118,7 +118,7 @@
         if (link.getAttribute('aria-current') !== 'location') {
           link.setAttribute('aria-current', 'location');
           // Auto-scroll pill horizontally inside its container ONLY - NEVER scroll window/document!
-          if (pageIndexNav && window.innerWidth <= 1050) {
+          if (pageIndexNav && window.innerWidth <= 1679) {
             const linkLeft = link.getBoundingClientRect().left - pageIndexNav.getBoundingClientRect().left + pageIndexNav.scrollLeft;
             const linkWidth = link.offsetWidth;
             const navWidth = pageIndexNav.clientWidth;
