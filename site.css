@@ -45,6 +45,9 @@
   --color-bili: #bd3d6c; /* Bilibili accent */
   --color-bili-ink: #742142; /* Bilibili text */
   --color-bili-soft: #f7e6ee; /* Bilibili background */
+  --color-fig-green: #0d7d5a; /* interactive figures: main series */
+  --color-fig-warm: #c4532a; /* interactive figures: gain, photons */
+  --color-fig-violet: #6c55c7; /* interactive figures: third series */
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
   --color-border-subtle: rgba(130, 157, 143, 0.28);
   --radius-sm: 6px;
@@ -2684,3 +2687,449 @@ html[lang=en] .history-row>* {
     transition: none;
   }
 }
+
+/* 19. Interactive research figures --------------------------------------- */
+/* Built by figures.js. Without JavaScript the original <img> stays visible. */
+
+.ifig {
+  margin: 36px auto;
+  max-width: 920px;
+}
+
+.ifig.is-interactive > img {
+  display: none;
+}
+
+.ifig-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-line-soft);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+  padding: 22px 22px 18px;
+}
+
+.ifig-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  font-family: var(--font-sans);
+}
+
+.ifig-plot {
+  position: relative;
+}
+
+.ifig-two {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.ifig-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  margin: 4px 0 14px;
+}
+
+.ifig-slider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.ifig-slider input[type=range] {
+  width: 180px;
+  accent-color: var(--color-accent);
+}
+
+.ifig-value {
+  min-width: 3.2em;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.ifig-seg {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+}
+
+.ifig-seg button,
+.ifig-steps button,
+.ifig-play {
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  border: 0;
+  border-radius: var(--radius-full);
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--color-text-muted);
+}
+
+.ifig-seg button[aria-pressed=true] {
+  background: var(--color-accent);
+  color: var(--color-white);
+}
+
+.ifig-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.ifig-steps button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--color-line);
+  background: var(--color-bg);
+}
+
+.ifig-steps button[aria-selected=true] {
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.ifig-step-n {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-surface-2);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.ifig-play {
+  margin-left: auto;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.ifig-seg button:focus-visible,
+.ifig-steps button:focus-visible,
+.ifig-play:focus-visible,
+.ifig-svg [tabindex]:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.ifig-desc {
+  min-height: 3.4em;
+  margin: 12px 0 4px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--color-text);
+}
+
+.ifig-desc strong {
+  color: var(--color-ink);
+}
+
+.ifig-note {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-text-soft);
+}
+
+.ifig-sub {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--color-line);
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.ifig-sub.is-highlight {
+  background: linear-gradient(var(--color-bg), transparent 70%);
+}
+
+.ifig-subhead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--color-ink);
+}
+
+.ifig-formula {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--color-text-muted);
+}
+
+.ifig-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.ifig-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ifig-legend i {
+  display: inline-block;
+  width: 18px;
+  height: 0;
+  border-top: 2px solid;
+}
+
+.ifig-legend .k-band,
+.ifig-legend .k-total { border-color: var(--color-fig-green); border-top-width: 3px; }
+.ifig-legend .k-gap { height: 10px; border: 0; border-radius: 2px; background: var(--color-fig-warm); opacity: 0.35; }
+.ifig-legend .k-light { border-top: 2px dashed var(--color-line-strong); }
+.ifig-legend .k-up { border-top: 2px dashed var(--color-fig-warm); }
+.ifig-legend .k-dn { border-top: 2px dotted var(--color-fig-violet); }
+
+/* tooltip */
+.ifig-tip {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  padding: 6px 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  background: var(--color-white);
+  box-shadow: var(--shadow-card);
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.ifig-tip strong {
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* SVG marks */
+.ifig-axis { stroke: var(--color-line-strong); stroke-width: 1; }
+.ifig-grid { stroke: var(--color-line-soft); stroke-width: 1; }
+.ifig-tick { font-size: 13px; fill: var(--color-text-soft); font-variant-numeric: tabular-nums; }
+.ifig-cap { font-size: 14px; fill: var(--color-text-muted); }
+.ifig-axis-label { font-family: var(--font-serif); font-style: italic; font-size: 18px; fill: var(--color-ink); }
+.ifig-hit { fill: transparent; cursor: crosshair; }
+.ifig-hit:focus { outline: none; }
+.ifig-cross { stroke: var(--color-text-soft); stroke-width: 1; stroke-dasharray: 3 3; }
+.ifig-dot { fill: var(--color-white); stroke: var(--color-fig-green); stroke-width: 2.5; }
+
+/* setup schematic */
+.ifig-stage { transition: opacity 0.25s ease; }
+.ifig-stage.is-dim { opacity: 0.28; }
+.ifig-beam { stroke: var(--color-line-strong); stroke-width: 2; stroke-dasharray: 6 5; fill: none; }
+.ifig-substrate { fill: var(--color-text-muted); }
+.ifig-grating { fill: none; stroke: var(--color-text-muted); stroke-width: 2; stroke-linejoin: round; }
+.ifig-packet-env { fill: var(--color-fig-green); opacity: 0.16; }
+.ifig-packet-wave { fill: none; stroke: var(--color-fig-green); stroke-width: 2.5; }
+.ifig-packet.is-shaped .ifig-packet-env { fill: var(--color-fig-warm); }
+.ifig-packet.is-shaped .ifig-packet-wave { stroke: var(--color-fig-warm); }
+.ifig-photon { fill: none; stroke: var(--color-fig-warm); stroke-width: 2.5; }
+.ifig-photon-dir, .ifig-emitted-dir { stroke: var(--color-text-muted); stroke-width: 2.5; }
+.ifig-emitted { fill: none; stroke: var(--color-fig-violet); stroke-width: 2.5; }
+.ifig-device { fill: var(--color-surface); stroke: var(--color-text-muted); stroke-width: 1.5; }
+.ifig-device-bar { fill: var(--color-fig-green); }
+.ifig-badge { cursor: pointer; }
+.ifig-badge circle { fill: var(--color-surface-2); stroke: var(--color-white); stroke-width: 2; transition: fill 0.2s ease; }
+.ifig-badge text { font-size: 15px; font-weight: 700; fill: var(--color-ink); }
+.ifig-badge.is-active circle, .ifig-badge:hover circle { fill: var(--color-accent); }
+.ifig-badge.is-active text, .ifig-badge:hover text { fill: var(--color-white); }
+
+/* PINEM bars */
+.ifig-bar { fill: var(--color-fig-green); transition: y 0.15s ease, height 0.15s ease; }
+.ifig-bar.is-zero { fill: var(--color-accent); }
+.ifig-bar:focus { outline: none; stroke: var(--color-focus); stroke-width: 2; }
+
+/* dispersion */
+.ifig-light { stroke: var(--color-line-strong); stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; }
+.ifig-band { fill: none; stroke: var(--color-fig-green); stroke-width: 3; stroke-linecap: round; }
+.ifig-gapfill { fill: var(--color-fig-warm); opacity: 0.22; stroke: var(--color-fig-warm); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.ifig-gaplabel { font-size: 14px; font-weight: 600; fill: var(--color-ink); }
+.ifig-wave { fill: none; stroke: var(--color-fig-green); stroke-width: 2; }
+.ifig-env { fill: none; stroke: var(--color-fig-warm); stroke-width: 1.5; stroke-dasharray: 5 4; }
+
+/* concept map */
+.ifig-edge { stroke: var(--color-line-strong); stroke-width: 3; transition: stroke 0.2s ease, opacity 0.2s ease; }
+.ifig-node ellipse { fill: var(--color-white); stroke: var(--color-text-muted); stroke-width: 1.5; transition: fill 0.2s ease, stroke 0.2s ease; }
+.ifig-node.is-center ellipse { fill: var(--color-surface); stroke: var(--color-accent); stroke-width: 2; }
+.ifig-node-name { font-size: 19px; font-weight: 700; fill: var(--color-ink); }
+.ifig-node.is-center .ifig-node-name { font-size: 24px; }
+.ifig-node-year { font-size: 16px; fill: var(--color-text-muted); font-variant-numeric: tabular-nums; }
+.ifig-node, .ifig-theme { cursor: pointer; transition: opacity 0.2s ease; }
+.ifig-theme text { font-size: 16px; fill: var(--color-text-muted); }
+.ifig-svg.is-focus .ifig-node:not(.is-on),
+.ifig-svg.is-focus .ifig-theme:not(.is-on),
+.ifig-svg.is-focus .ifig-edge:not(.is-on) { opacity: 0.22; }
+.ifig-svg.is-focus .ifig-node.is-on:not(.is-center) ellipse { fill: var(--color-surface); stroke: var(--color-accent); }
+.ifig-svg.is-focus .ifig-edge.is-on { stroke: var(--color-accent); }
+.ifig-svg.is-focus .ifig-theme.is-on text { fill: var(--color-ink); font-weight: 600; }
+
+/* measurement */
+.ifig-total { fill: none; stroke: var(--color-fig-green); stroke-width: 3; }
+.ifig-comp { fill: none; stroke-width: 2; }
+.ifig-comp.up { stroke: var(--color-fig-warm); stroke-dasharray: 6 4; }
+.ifig-comp.dn { stroke: var(--color-fig-violet); stroke-dasharray: 2 4; }
+.ifig-direct { font-size: 16px; font-weight: 600; fill: var(--color-ink); }
+.ifig-mean { stroke: var(--color-ink); stroke-width: 1.5; }
+.ifig-qc {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+.ifig-qc-q, .ifig-qc-c { font-family: var(--font-serif); font-size: 22px; color: var(--color-ink); }
+.ifig-qc-arrows { display: flex; flex-direction: column; font-size: 12px; line-height: 1.6; }
+.ifig-qc-arrows .to-c { color: var(--color-fig-green); }
+.ifig-qc-arrows .to-q { color: var(--color-fig-warm); }
+.ifig-badge-pill {
+  margin-left: auto;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-accent);
+}
+.ifig-badge-pill[data-regime=strong] { background: var(--color-accent); color: var(--color-white); }
+
+/* key-feature list and gap table (static HTML) */
+.ifig-features {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 24px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: feat;
+}
+.ifig-features li {
+  position: relative;
+  padding-left: 34px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+.ifig-features li::before {
+  counter-increment: feat;
+  content: counter(feat);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--color-surface-2);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+.ifig-features em { font-style: normal; color: var(--color-fig-warm); font-weight: 600; }
+
+.gap-table-wrap { overflow-x: auto; }
+.gap-table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: separate;
+  border-spacing: 4px;
+  font-size: 14px;
+  text-align: center;
+}
+.gap-table th { padding: 10px 8px; background: var(--color-surface); color: var(--color-ink); font-weight: 600; border-radius: 6px; }
+.gap-table th[scope=row] { font-family: var(--font-serif); font-size: 16px; }
+.gap-table thead th:first-child { background: var(--color-accent); color: var(--color-white); font-family: var(--font-serif); font-style: italic; }
+.gap-table td { padding: 10px 8px; border-radius: 6px; }
+.gap-table .kk { background: var(--color-surface); color: var(--color-ink); }
+.gap-table .uk { background: var(--color-line-soft); color: var(--color-text); }
+.gap-table .ku { background: var(--color-line-strong); color: var(--color-brand-dark); }
+.gap-table .uu { background: var(--color-text-muted); color: var(--color-white); }
+.gap-table .fb { background: var(--color-white); border: 1px dashed var(--color-fig-warm); color: var(--color-fig-warm); font-weight: 600; }
+
+@media (max-width: 750px) {
+  .ifig-card { padding: 16px 12px 14px; }
+  .ifig-two { grid-template-columns: 1fr; }
+  .ifig-slider { width: 100%; }
+  .ifig-slider input[type=range] { flex: 1; width: auto; }
+  .ifig-play { margin-left: 0; }
+  .ifig-features { grid-template-columns: 1fr; }
+  .ifig-badge-pill { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ifig-stage, .ifig-bar, .ifig-edge, .ifig-node, .ifig-theme, .ifig-sub { transition: none; }
+}
+
+/* compact layout (figure narrower than 560px): larger SVG text, fewer labels */
+.ifig-card.is-compact .ifig-tick { font-size: 17px; }
+.ifig-card.is-compact .ifig-cap { font-size: 17px; }
+.ifig-card.is-compact .ifig-axis-label { font-size: 22px; }
+.ifig-card.is-compact .ifig-gaplabel { font-size: 17px; }
+.ifig-card.is-compact .ifig-setup .ifig-cap { display: none; }
+.ifig-card.is-compact .ifig-badge text { font-size: 22px; }
+.ifig-card.is-compact .ifig-direct { font-size: 20px; }
+
+.ifig-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.ifig-chip {
+  font: inherit;
+  font-size: 12px;
+  padding: 5px 12px;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-full);
+  background: var(--color-bg);
+  color: var(--color-text-muted);
+  cursor: pointer;
+}
+.ifig-chips.is-focus .ifig-chip:not(.is-on) { opacity: 0.4; }
+.ifig-chip.is-on { border-color: var(--color-accent); color: var(--color-ink); font-weight: 600; }
+
+/* concept triangle and Floquet figure */
+.ifig-core { stroke: var(--color-accent); stroke-width: 1.5; stroke-dasharray: 5 4; }
+.ifig-core-text { font-size: 20px; font-weight: 700; fill: var(--color-ink); }
+.ifig-card.is-compact .ifig-core-text { font-size: 19px; }
+.ifig-zone { fill: var(--color-surface); opacity: 0.7; }
+.ifig-replica { fill: none; stroke: var(--color-fig-green); stroke-width: 2; stroke-dasharray: 6 5; opacity: 0.55; }
+.ifig-legend .k-replica { border-top: 2px dashed var(--color-fig-green); opacity: 0.6; }
+.ifig-heat canvas { display: block; width: 100%; height: auto; aspect-ratio: 328 / 240; border: 1px solid var(--color-line-soft); border-radius: 6px; image-rendering: pixelated; cursor: crosshair; }
+.ifig-heat-title { margin: 4px 0 8px; font-size: 13px; color: var(--color-text-muted); }
+.ifig-heat-axis { display: flex; justify-content: space-between; margin-top: 6px; font-size: 12px; color: var(--color-text-soft); }
+.ifig-chip.is-static { cursor: default; color: var(--color-ink); background: var(--color-surface); border-color: var(--color-line-soft); }
+.ifig-qc .ifig-note { flex-basis: 100%; margin: 0; }
+.prose img.img-cutout,
+.research-figures figure img.img-cutout,
+img.img-cutout { background: transparent; border: 0; box-shadow: none; padding: 0; }
+.prose img.img-cutout:hover,
+.research-figures figure img.img-cutout:hover { box-shadow: none; }
+
+/* keep the soliton comparison figure at a readable size */
+.research-figures figure img.img-cutout { max-width: 760px; margin-inline: auto; }
+
+/* footer credit line */
+.footer .footer-credit { margin-top: 4px; opacity: 0.85; }
+.footer .footer-credit a { text-decoration: underline; text-underline-offset: 3px; }

@@ -4,6 +4,24 @@ Official website for the **LiFE Lab** (Light interaction with Free Electron Rese
 
 🌐 **Website**: [https://life-group.cn](https://life-group.cn)
 
+## Credits
+
+| Role | Person |
+| --- | --- |
+| Design | Zirui Zhao（赵梓睿） |
+| Development | Zirui Zhao（赵梓睿） |
+| Maintenance | Zirui Zhao（赵梓睿）, Yiming Pan（潘义明） |
+
+- **Design** — visual identity, page layout, typography and colour system, interactive research figures.
+- **Development** — static site build, bilingual (Chinese / English) pages, styles and scripts.
+- **Maintenance** — content updates, publications and news, deployment to GitHub Pages.
+
+Profile: [life-group.cn/members/zirui-zhao.html](https://life-group.cn/members/zirui-zhao.html)
+
+**AI assistance.** Parts of this website's design, code and text were created with the assistance of AI tools: ChatGPT (OpenAI), Gemini (Google) and Claude (Anthropic).
+
+**AI 辅助声明：** 本网站的部分设计、代码与文字在 ChatGPT（OpenAI）、Gemini（Google）和 Claude（Anthropic）的辅助下完成。
+
 ## Overview
 
 This repository hosts the static website deployment for the LiFE research group led by Prof. Yiming Pan.
