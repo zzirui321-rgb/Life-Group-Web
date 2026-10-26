@@ -10,13 +10,15 @@
    - anomaly      anomaly concept map (interests page)
    - measurement  weak-to-strong measurement (interests page)
    - concepts     three electron–light processes (research page)
-   - floquet      driven lattice: quasienergy + discrete diffraction (interests page)
+   - floquet      driven two-band system: quasienergies + Rabi dynamics (interests page)
+   - soliton      event / k-gap / Bragg formation from a numerical envelope model
    ========================================================================== */
 (() => {
   const EN = document.documentElement.lang.startsWith('en');
   const T = (zh, en) => (EN ? en : zh);
   const NS = 'http://www.w3.org/2000/svg';
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const guide = window.LifeFigureGuide;
 
   // ---------- small DOM helpers ----------
   const h = (tag, attrs = {}, ...kids) => {
@@ -46,6 +48,32 @@
   const linspace = (a, b, n) => Array.from({ length: n }, (_, i) => a + (b - a) * i / (n - 1));
   const pathOf = (pts) => pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join('');
   const fmt = (v, d = 2) => (Math.abs(v) < 1e-9 ? '0' : v.toFixed(d));
+
+  function showReading(panel, item) {
+    if (!item) return;
+    panel.replaceChildren(h('h3', {text:item.title}), h('p', {text:item.text}));
+    const list = h('ul', {class:'ifig-reading'});
+    item.refs.forEach(([label, title, href]) => list.append(h('li', {}, h('a', {href, target:'_blank', rel:'noopener noreferrer'}, h('strong', {text:label}), h('span', {text:title + ' ↗'})))));
+    panel.append(h('h4', {text:T('经典论文与延伸阅读','Foundational papers & further reading')}), list);
+  }
+
+  function addGuide(fig, card) {
+    if (fig.dataset.ifig === 'soliton') return;
+    const note = guide?.notes[fig.dataset.ifig];
+    if (!note) return;
+    const visual = h('div', {class:'ifig-visual'});
+    const reading = card.querySelector('.ifig-context');
+    [...card.childNodes].forEach(node=>visual.append(node));
+    const aside = h('aside', {class:'ifig-guide', 'aria-label':T('图示阅读指南','Figure reading guide')},
+      h('span',{class:'ifig-guide-kicker',text:T('读懂这张图','READ THE FIGURE')}), h('h3',{text:note[0]}), h('p',{text:note[1]}),
+      h('h4',{text:T('试着操作','TRY IT')}), h('p',{text:note[2]}), h('h4',{text:T('留意什么','LOOK FOR')}), h('p',{text:note[3]}));
+    card.classList.add('ifig-with-guide');
+    card.append(visual,aside);
+    if (reading) {
+      card.classList.add('ifig-map-layout');
+      card.append(reading);
+    }
+  }
 
   function slider({ label, min, max, step, value, format, oninput }) {
     const id = 'ifig-' + Math.random().toString(36).slice(2, 8);
@@ -122,7 +150,7 @@
       { n: 2, title: T('入射光子', 'Incoming photon'), text: T('激光脉冲照射纳米结构，在其表面激发出局域近场。', 'A laser pulse illuminates the nanostructure and excites a localized near field.') },
       { n: 3, title: T('光与电子相互作用', 'Light–electron interaction'), text: T('电子穿过近场时吸收或放出整数个光子能量 ħω——这就是光子诱导近场电子显微（PINEM）。', 'Crossing the near field, the electron absorbs or emits integer numbers of photon energies ħω — photon-induced near-field electron microscopy (PINEM).') },
       { n: 4, title: T('电子能谱仪', 'Electron spectrometer'), text: T('能谱上出现间隔为 ħω 的离散边带，边带分布由耦合强度 |g| 决定（见下方能谱）。', 'The spectrum shows discrete sidebands spaced by ħω; their distribution is set by the coupling strength |g| (see the spectrum below).') },
-      { n: 5, title: T('光学探测器', 'Optical detector'), text: T('收集电子与结构作用后发出的光子；与电子能谱做时间关联符合测量，可用于研究电子与光子的量子纠缠。', 'Collects photons emitted after the interaction; time-correlated coincidence with the electron spectrum probes electron–photon entanglement.') },
+      { n: 5, title: T('光学探测器', 'Optical detector'), text: T('可选的探测扩展：收集电子与结构作用后发出的光子，并与电子信号做符合测量，用于研究电子–光子关联；这不是 PINEM 能谱测量的必需环节。', 'An optional extension collects emitted photons in coincidence with electron signals to study electron–photon correlations; it is not required for a PINEM energy-spectrum measurement.') },
     ];
     const W = 760, H = 300, axisY = 196;
     const svg = svgRoot(W, H, T('自由电子与光相互作用的实验链路示意图', 'Schematic of the free-electron–light experiment chain'));
@@ -168,6 +196,9 @@
       s('path', { d: pulse, class: 'ifig-photon' }),
       s('line', { x1: 300, y1: 140, x2: 318, y2: 162, class: 'ifig-photon-dir', 'marker-end': 'url(#ifg-arrow)' }),
       s('text', { x: 150, y: 34, class: 'ifig-cap', text: T('激光脉冲', 'laser pulse') })));
+    const laserPacket = s('g', {class:'ifig-laser-packet'}, s('path', {d:packet(0,0,76,11,7), class:'ifig-photon'}));
+    laserPacket.setAttribute('transform','translate(170 40) rotate(42.5)');
+    svg.append(laserPacket);
     // 4: spectrometer
     svg.append(G(4,
       s('rect', { x: 652, y: 160, width: 76, height: 72, rx: 8, class: 'ifig-device' }),
@@ -175,14 +206,18 @@
       s('text', { x: 690, y: 254, class: 'ifig-cap', 'text-anchor': 'middle', text: T('电子能谱仪', 'spectrometer') })));
     // 5: emitted photon + detector
     const emitted = pathOf(linspace(0, 1, 120).map((u) => {
-      const x = 360 + u * 150, y = 150 - u * 78, off = 6 * Math.sin(u * 16 * Math.PI) * Math.exp(-((u - 0.5) ** 2) * 6);
-      return [x + off * 0.46, y + off * 0.89];
+      const x = 340 + u * 190, y = 196 - u * 125, off = 6 * Math.sin(u * 16 * Math.PI) * Math.exp(-((u - 0.5) ** 2) * 6);
+      return [x + off * 0.55, y + off * 0.84];
     }));
     svg.append(G(5,
       s('path', { d: emitted, class: 'ifig-emitted' }),
-      s('line', { x1: 506, y1: 76, x2: 520, y2: 69, class: 'ifig-emitted-dir', 'marker-end': 'url(#ifg-arrow)' }),
+      s('line', { x1: 506, y1: 87, x2: 520, y2: 78, class: 'ifig-emitted-dir', 'marker-end': 'url(#ifg-arrow)' }),
       s('path', { d: 'M530 46 h52 a8 8 0 0 1 8 8 v34 a8 8 0 0 1 -8 8 h-52 a26 26 0 0 1 0 -50z', class: 'ifig-device' }),
       s('text', { x: 600, y: 76, class: 'ifig-cap', text: T('光学探测器', 'optical detector') })));
+    const emittedPacket = s('g', {class:'ifig-emitted-packet', opacity:0},
+      s('path', {d:packet(0,0,58,9,6),class:'ifig-emitted'}));
+    const detectorPulse = s('circle', {cx:550,cy:71,r:9,class:'ifig-detector-pulse',opacity:0});
+    svg.append(emittedPacket,detectorPulse);
     // numbered badges (also clickable)
     const badgePos = { 1: [62, 160], 2: [214, 104], 3: [340, 132], 4: [740, 156], 5: [556, 30] };
     const badges = {};
@@ -190,55 +225,81 @@
       const [bx, by] = badgePos[st.n];
       const b = s('g', { class: 'ifig-badge', tabindex: 0, role: 'button', 'aria-label': `${st.n} ${st.title}` },
         s('circle', { cx: bx, cy: by, r: cx ? 21 : 13 }), s('text', { x: bx, y: by + (cx ? 8 : 5), 'text-anchor': 'middle', text: String(st.n) }));
-      b.addEventListener('click', () => select(st.n));
-      b.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); select(st.n); } });
+      b.addEventListener('click', () => { stopAnimation(); select(st.n); });
+      b.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); stopAnimation(); select(st.n); } });
       badges[st.n] = b; svg.append(b);
     }
 
     // step buttons + description
-    const stepRow = h('div', { class: 'ifig-steps', role: 'tablist' });
+    const stepRow = h('div', { class: 'ifig-steps', role: 'group', 'aria-label':T('实验环节','Experiment stages') });
     const stepBtns = steps.map((st) => {
-      const b = h('button', { type: 'button', role: 'tab', 'aria-selected': 'false' }, h('span', { class: 'ifig-step-n', text: String(st.n) }), st.title);
-      b.addEventListener('click', () => select(st.n));
+      const b = h('button', { type: 'button', 'aria-pressed': 'false' }, h('span', { class: 'ifig-step-n', text: String(st.n) }), st.title);
+      b.addEventListener('click', () => { stopAnimation(); select(st.n); });
       stepRow.append(b);
       return b;
     });
-    const play = h('button', { type: 'button', class: 'ifig-play', text: T('▶ 播放全过程', '▶ Play') });
+    const play = h('button', { type: 'button', class: 'ifig-play', 'aria-pressed':'false', text: T('▶ 同步发射', '▶ Launch together') });
     stepRow.append(play);
     const desc = h('p', { class: 'ifig-desc' });
     let current = 0;
     function select(n) {
       current = n;
       for (const st of steps) {
-        const on = st.n === n;
-        groups[st.n].classList.toggle('is-dim', n !== 0 && !on);
+        const on = n === 0 ? st.n === 1 || st.n === 2 : st.n === n;
+        groups[st.n].classList.toggle('is-dim', !on);
         badges[st.n].classList.toggle('is-active', on);
-        stepBtns[st.n - 1].setAttribute('aria-selected', String(on));
+        stepBtns[st.n - 1].setAttribute('aria-pressed', String(on));
       }
       const st = steps[n - 1];
-      desc.replaceChildren(h('strong', { text: `${st.n} · ${st.title}　` }), st.text);
+      if (st) desc.replaceChildren(h('strong', { text: `${st.n} · ${st.title}　` }), st.text);
+      else desc.replaceChildren(h('strong',{text:T('光与电子同步出发　','Light and electrons launch together　')}),T('两束脉冲沿不同路径到达纳米结构，在近场处实现时间与空间重叠。','The pulses follow different paths and overlap in space and time at the nanostructure.'));
       spec.wrap.classList.toggle('is-highlight', n === 4 || n === 3);
     }
 
     // packet animation along the beam
-    let raf = 0;
+    let raf = 0, running = false;
+    const motionPref = matchMedia('(prefers-reduced-motion: reduce)');
+    function stopAnimation() {
+      cancelAnimationFrame(raf); raf=0; running=false;
+      play.textContent=T('▶ 同步发射','▶ Launch together'); play.setAttribute('aria-pressed','false');
+    }
     function animate() {
-      cancelAnimationFrame(raf);
+      stopAnimation(); running=true;
+      emittedPacket.setAttribute('opacity','0'); detectorPulse.setAttribute('opacity','0');
+      groups[5].classList.remove('is-detected');
+      play.textContent=T('Ⅱ 暂停','Ⅱ Pause'); play.setAttribute('aria-pressed','true');
       const t0 = performance.now(), dur = 4200;
       const tick = (now) => {
         const u = Math.min(1, (now - t0) / dur);
-        const x = 120 + u * (600 - 120);
+        const arrival = Math.min(1,u/0.5);
+        const x = u<=0.5 ? 120+arrival*220 : 340+Math.min(1,(u-0.5)/0.44)*330;
         pk.setAttribute('transform', `translate(${x} 0)`);
+        laserPacket.setAttribute('transform',`translate(${170+170*arrival} ${40+156*arrival}) rotate(42.5)`);
+        laserPacket.style.opacity=String(u<=0.5 ? 1 : Math.max(0,1-(u-0.5)*8));
         pk.classList.toggle('is-shaped', x > 340);
-        const stage = x < 200 ? 1 : x < 280 ? 2 : x < 420 ? 3 : u < 0.88 ? 4 : 5;
+        const optical=Math.max(0,Math.min(1,(u-.52)/.30));
+        emittedPacket.setAttribute('transform',`translate(${340+190*optical} ${196-125*optical}) rotate(-33.3)`);
+        emittedPacket.setAttribute('opacity',String(u>.52&&u<.84?1:0));
+        const detected=u>=.82;
+        groups[5].classList.toggle('is-detected',detected);
+        detectorPulse.setAttribute('opacity',detected?String(Math.max(.25,1-(u-.82)*3)):'0');
+        detectorPulse.setAttribute('r',String(8+Math.max(0,u-.82)*50));
+        svg.dataset.opticalPhase=detected?'detected':u>.52?'travelling':'waiting';
+        const stage = u<0.44 ? 0 : u<0.64 ? 3 : u<.87 ? 5 : 4;
         if (stage !== current) select(stage);
         if (u < 1) raf = requestAnimationFrame(tick);
-        else setTimeout(() => { pk.setAttribute('transform', 'translate(120 0)'); pk.classList.remove('is-shaped'); }, 900);
+        else stopAnimation();
       };
       raf = requestAnimationFrame(tick);
     }
     play.addEventListener('click', () => {
-      if (reduceMotion) { let n = 1; select(n); const iv = setInterval(() => { n += 1; if (n > 5) return clearInterval(iv); select(n); }, 1200); }
+      if (running) { stopAnimation(); return; }
+      if (motionPref.matches) {
+        pk.setAttribute('transform','translate(670 0)');
+        laserPacket.style.opacity='0';emittedPacket.setAttribute('opacity','0');
+        groups[5].classList.add('is-detected');detectorPulse.setAttribute('opacity','1');
+        svg.dataset.opticalPhase='detected';select(5);
+      }
       else animate();
     });
 
@@ -246,7 +307,11 @@
     const spec = buildPinem(cx);
     const card = h('div', { class: 'ifig-card' }, svg, stepRow, desc, spec.wrap);
     fig.prepend(card);
-    select(1);
+    const onHidden = () => { if(document.hidden || motionPref.matches) stopAnimation(); };
+    document.addEventListener('visibilitychange',onHidden); motionPref.addEventListener('change',onHidden);
+    const visible = new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)stopAnimation();});visible.observe(fig);
+    card.dispose=()=>{stopAnimation();visible.disconnect();document.removeEventListener('visibilitychange',onHidden);motionPref.removeEventListener('change',onHidden);};
+    select(0);
     return card;
   }
 
@@ -478,7 +543,7 @@
     const nodes = [
       { id: 'ch', x: P.ch[0], y: P.ch[1], name: 'Callan–Harvey', year: '1985', themes: ['top', 'left'] },
       { id: 'as', x: P.as[0], y: P.as[1], name: 'Atiyah–Singer', year: '1963', themes: ['top', 'right'] },
-      { id: 'ah', x: P.ah[0], y: P.ah[1], name: 'Anderson–Higgs', year: '1950/1972', themes: ['left', 'bottom'] },
+      { id: 'ah', x: P.ah[0], y: P.ah[1], name: 'Anderson–Higgs', year: '1963/1964', themes: ['left', 'bottom'] },
       { id: 'cs', x: P.cs[0], y: P.cs[1], name: 'Chern–Simons', year: '1974', themes: ['right', 'bottom'] },
     ];
     const themes = {
@@ -515,9 +580,8 @@
       nodeEls[n.id] = g; svg.append(g); return g;
     };
     mkNode(C, true); nodes.forEach((n) => mkNode(n));
-    const info = h('p', { class: 'ifig-desc' });
-    const defaultInfo = T('将鼠标移到某个理论或主题上，查看它与“反常”之间的联系。', 'Hover or focus a theory or theme to see how it links to the anomaly.');
-    info.textContent = defaultInfo;
+    const info = h('div', { class: 'ifig-context' });
+    showReading(info, guide?.anomaly.c);
     function focusOn({ node, theme }) {
       const activeNodes = new Set(), activeThemes = new Set();
       if (node === 'c') { nodes.forEach((n) => activeNodes.add(n.id)); Object.keys(themes).forEach((t) => activeThemes.add(t)); }
@@ -527,21 +591,22 @@
       nodes.forEach((n) => { nodeEls[n.id].classList.toggle('is-on', activeNodes.has(n.id)); edgeEls[n.id].classList.toggle('is-on', activeNodes.has(n.id)); });
       nodeEls.c.classList.add('is-on');
       Object.entries(themeEls).forEach(([k, el]) => el.classList.toggle('is-on', activeThemes.has(k)));
-      if (node === 'c') info.replaceChildren(h('strong', { text: 'anomaly (1969)　' }), T('经典对称性在量子化后被破坏的现象。四周的理论都与它相连。', 'A classical symmetry broken by quantization. Each theory around it connects back to it.'));
-      else if (node) { const n = nodes.find((x) => x.id === node); info.replaceChildren(h('strong', { text: `${n.name} (${n.year})　` }), T('相关主题：', 'related themes: ') + n.themes.map((t) => themes[t].lines.join(' ')).join('；')); }
-      else info.replaceChildren(h('strong', { text: themes[theme].lines.join(' ') + '　' }), T('连接：', 'links ') + themes[theme].nodes.map((id) => nodes.find((n) => n.id === id).name).join(' · '));
+      showReading(info, guide?.anomaly[node || theme]);
     }
-    const clear = () => { svg.classList.remove('is-focus'); chips.classList.remove('is-focus'); info.textContent = defaultInfo; };
     for (const [id, el] of Object.entries(nodeEls)) {
       el.addEventListener('pointerenter', () => focusOn({ node: id })); el.addEventListener('focus', () => focusOn({ node: id }));
-      el.addEventListener('pointerleave', clear); el.addEventListener('blur', clear);
+      el.addEventListener('click', () => focusOn({ node: id }));
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); focusOn({ node: id }); } });
     }
     for (const [k, el] of Object.entries(themeEls)) {
       el.addEventListener('pointerenter', () => focusOn({ theme: k })); el.addEventListener('focus', () => focusOn({ theme: k }));
-      el.addEventListener('pointerleave', clear); el.addEventListener('blur', clear);
+      el.addEventListener('click', () => focusOn({ theme: k }));
+      el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); focusOn({ theme: k }); } });
     }
-    // touch: tap toggles focus
-    for (const el of [...Object.values(nodeEls), ...Object.values(themeEls)]) el.addEventListener('click', () => el.focus());
+    for (const [id, el] of Object.entries(edgeEls)) {
+      el.addEventListener('pointerenter', () => focusOn({ node: id }));
+      el.addEventListener('click', () => focusOn({ node: id }));
+    }
     const card = h('div', { class: 'ifig-card' }, svg, cx ? chips : null, info);
     fig.prepend(card);
     return card;
@@ -550,70 +615,76 @@
   /* ======================================================================
      4. Weak-to-strong measurement
      ====================================================================== */
+  // Conditional Gaussian readout after erasing branch labels. Opposite linear
+  // phases give relative phase q*x; eta is residual coherence, not mere overlap.
+  function measurementDistribution(x, g, p, eta, coherent=true) {
+    const q=5, gaussian=m=>Math.exp(-.5*(x-m)**2)/Math.sqrt(2*Math.PI);
+    const a=p*gaussian(g),b=(1-p)*gaussian(-g),c=coherent?eta:0;
+    const norm=1+2*c*Math.sqrt(p*(1-p))*Math.exp(-.5*(g*g+q*q));
+    const interference=2*c*Math.sqrt(a*b)*Math.cos(q*x)/norm;
+    return {a:a/norm,b:b/norm,interference,total:(a+b)/norm+interference};
+  }
   function buildMeasurement(fig, cx) {
-    let g = 0.4, p = 0.7;
-    const W = cx ? 420 : 760, H = cx ? 320 : 300, x0 = 30, y0 = 20, pw = W - 50, ph = cx ? 240 : 230, XR = cx ? [-5, 5] : [-7, 7];
-    const svg = svgRoot(W, H, T('测量仪表指针的读数分布', 'pointer reading distribution'));
-    const { sx } = plotArea(svg, { x0, y0, w: pw, hgt: ph, xr: XR, yr: [0, 1] });
-    for (let v = XR[0] + 1; v <= XR[1] - 1; v += 2) svg.append(s('text', { x: sx(v), y: y0 + ph + 20, 'text-anchor': 'middle', class: 'ifig-tick', text: String(v) }));
-    svg.append(s('text', { x: x0 + pw, y: y0 + ph + 42, 'text-anchor': 'end', class: 'ifig-cap', text: T('指针读数 x / σ', 'pointer reading x / σ') }));
-    const cUp = s('path', { class: 'ifig-comp up' }), cDn = s('path', { class: 'ifig-comp dn' }), total = s('path', { class: 'ifig-total' });
-    const mean = s('line', { y1: y0, y2: y0 + ph, class: 'ifig-mean' });
-    const meanLbl = s('text', { y: y0 + ph - 10, class: 'ifig-cap', 'text-anchor': 'start' });
-    const lblUp = s('text', { class: 'ifig-direct up', 'text-anchor': 'middle', text: '|↑⟩' }), lblDn = s('text', { class: 'ifig-direct dn', 'text-anchor': 'middle', text: '|↓⟩' });
-    const cross = s('line', { y1: y0, y2: y0 + ph, class: 'ifig-cross', style: 'opacity:0' });
-    const hit = s('rect', { x: x0, y: y0, width: pw, height: ph, class: 'ifig-hit' });
-    svg.append(total, cUp, cDn, mean, meanLbl, lblUp, lblDn, cross, hit);
-    const box = h('div', { class: 'ifig-plot' }, svg);
-    const tip = tooltip(box);
-    const badge = h('span', { class: 'ifig-badge-pill' });
-    const desc = h('p', { class: 'ifig-desc' });
-    const G = (x, m) => Math.exp(-((x - m) ** 2) / 2);
-    let scaleMax = 1;
-    const ys = (v) => y0 + ph - v / scaleMax * (ph - 24);
-    function draw() {
-      const xs = linspace(XR[0], XR[1], 400);
-      scaleMax = Math.max(...xs.map((x) => p * G(x, g) + (1 - p) * G(x, -g)), 0.5);
-      cUp.setAttribute('d', pathOf(xs.map((x) => [sx(x), ys(p * G(x, g))])));
-      cDn.setAttribute('d', pathOf(xs.map((x) => [sx(x), ys((1 - p) * G(x, -g))])));
-      total.setAttribute('d', pathOf(xs.map((x) => [sx(x), ys(p * G(x, g) + (1 - p) * G(x, -g))])));
-      const m = g * (2 * p - 1);
-      mean.setAttribute('x1', sx(m)); mean.setAttribute('x2', sx(m));
-      meanLbl.setAttribute('x', sx(m) + 8); meanLbl.textContent = `⟨x⟩ = ${fmt(m)}`;
-      lblUp.setAttribute('x', sx(Math.min(XR[1] - 0.8, g))); lblUp.setAttribute('y', ys(p * G(g, g)) - 10);
-      lblDn.setAttribute('x', sx(Math.max(XR[0] + 0.8, -g))); lblDn.setAttribute('y', ys((1 - p) * G(-g, -g)) - 10);
-      const regime = g < 0.6 ? 'weak' : g < 1.8 ? 'mid' : 'strong';
-      badge.textContent = { weak: T('弱测量', 'weak measurement'), mid: T('过渡区', 'crossover'), strong: T('投影（强）测量', 'projective (strong) measurement') }[regime];
-      badge.dataset.regime = regime;
-      desc.replaceChildren(h('strong', { text: `g/σ = ${fmt(g)} · ` }), {
-        weak: T('两种结果的读数分布几乎完全重叠：单次读数几乎不扰动量子态，只有大量统计后的平均偏移 ⟨x⟩ = g⟨σz⟩ 才携带信息。', 'The two outcome distributions overlap almost completely: a single reading barely disturbs the state, and only the averaged shift ⟨x⟩ = g⟨σz⟩ carries information.'),
-        mid: T('两峰开始分开：测量获取的信息增加，对量子态的扰动也随之增大。', 'The peaks begin to separate: the measurement gains information and disturbs the state more.'),
-        strong: T('两峰完全分开：每次读数都明确对应 |↑⟩ 或 |↓⟩，量子态被投影——这就是“量子到经典”的转变。', 'The peaks are fully separated: each reading picks |↑⟩ or |↓⟩ and the state is projected — the quantum-to-classical transition.'),
-      }[regime]);
+    let g=.4,p=.5,decoherence=0,coherent=true,raf=0,running=false;
+    const motion=matchMedia('(prefers-reduced-motion: reduce)');
+    const W=cx?420:760,H=310,x0=36,y0=22,pw=W-54,ph=225,XR=[-7,7];
+    const svg=svgRoot(W,H,T('重叠波包的干涉与退相干','Interference and decoherence of overlapping wave packets'));
+    const {sx}=plotArea(svg,{x0,y0,w:pw,hgt:ph,xr:XR,yr:[0,1]});
+    [-6,-4,-2,0,2,4,6].forEach(v=>svg.append(s('text',{x:sx(v),y:y0+ph+24,'text-anchor':'middle',class:'ifig-tick',text:String(v)})));
+    svg.append(s('text',{x:x0+pw,y:299,'text-anchor':'end',class:'ifig-cap',text:T('读数位置 x / σ','readout position x / σ')}));
+    const fill=s('path',{class:'ifig-interference-fill'}),total=s('path',{class:'ifig-total'}),up=s('path',{class:'ifig-comp up'}),down=s('path',{class:'ifig-comp dn'});
+    svg.append(fill,up,down,total);
+    const screen=h('canvas',{width:760,height:64,class:'ifig-fringe-screen',role:'img','aria-label':T('干涉条纹强度示意','Interference intensity pattern')});
+    const screenCtx=screen.getContext('2d');if(!screenCtx)throw new Error('Canvas unavailable');
+    const badge=h('span',{class:'ifig-badge-pill'}),desc=h('p',{class:'ifig-desc'}),readout=h('p',{class:'ifig-note'});
+    const play=h('button',{type:'button',class:'ifig-play','aria-pressed':'false',text:T('▶ 看条纹消退','▶ Watch fringes fade')});
+    const density=x=>measurementDistribution(x,g,p,1-decoherence,coherent);
+    const sy=v=>y0+ph-v/.82*(ph-15);
+    function draw(){
+      const xs=linspace(-7,7,700),values=xs.map(density),points=values.map((d,i)=>[sx(xs[i]),sy(d.total)]);
+      total.setAttribute('d',pathOf(points));fill.setAttribute('d',`M${sx(-7)} ${y0+ph}`+pathOf(points).replace(/^M/,'L')+`L${sx(7)} ${y0+ph}Z`);
+      up.setAttribute('d',pathOf(values.map((d,i)=>[sx(xs[i]),sy(d.a)])));down.setAttribute('d',pathOf(values.map((d,i)=>[sx(xs[i]),sy(d.b)])));
+      const rgb=name=>getComputedStyle(fig).getPropertyValue(name).trim().slice(1).match(/../g).map(v=>parseInt(v,16));
+      const bg=rgb('--color-bg'),ink=rgb('--color-ink'),data=screenCtx.createImageData(760,64);
+      for(let x=0;x<760;x++){const d=density(-7+14*x/759).total;for(let y=0;y<64;y++){
+        const a=Math.min(1,d/.82)*(.55+.45*Math.sin(Math.PI*y/63)),i=4*(y*760+x);
+        for(let c=0;c<3;c++)data.data[i+c]=Math.round(bg[c]+(ink[c]-bg[c])*a);data.data[i+3]=255;
+      }}screenCtx.putImageData(data,0,0);
+      const residual=coherent?1-decoherence:0;
+      badge.textContent=coherent?(decoherence<.01?T('相干叠加','Coherent superposition'):decoherence>.99?T('条纹消失','Fringes washed out'):T('退相干中','Losing coherence')):T('统计混合','Statistical mixture');
+      desc.textContent=coherent?T('两束波在重叠处相长、相消，形成条纹；退相干越强，条纹越淡。','The overlapping waves reinforce and cancel one another, creating fringes. Decoherence gradually washes them out.'):
+        T('直接统计指针、不分选自旋结果时，两种概率相加；即使重叠，也没有干涉项。','Without selecting the spin outcome, pointer probabilities add. Overlap alone produces no interference term.');
+      readout.textContent=coherent?T('相干读出：先擦除可区分的分支标记，再选取同一读出通道。','Coherent readout: erase distinguishable branch labels and select a common output channel.'):
+        T('直接读数：保留原来两种指针结果的统计分布。','Direct readout: retain the original statistical distribution of the two pointer outcomes.');
+      screen.dataset.coherence=String(residual);screen.dataset.separation=String(g);screen.dataset.mode=coherent?'coherent':'direct';
+      screen.setAttribute('aria-label',badge.textContent+'. '+desc.textContent);
     }
-    hit.addEventListener('pointermove', (e) => {
-      const pt = svgPoint(svg, e); const x = XR[0] + (pt.x - x0) / pw * (XR[1] - XR[0]);
-      cross.setAttribute('x1', sx(x)); cross.setAttribute('x2', sx(x)); cross.style.opacity = 1;
-      const [lx, ly] = localXY(box, e);
-      tip.show([[fmt(p * G(x, g) + (1 - p) * G(x, -g), 3), T('总概率密度（未归一）', 'total density (unnormalized)')], [`x = ${fmt(x)}`, '']], lx, ly);
+    function stop(){cancelAnimationFrame(raf);raf=0;running=false;play.setAttribute('aria-pressed','false');play.textContent=T('▶ 看条纹消退','▶ Watch fringes fade');}
+    const separation=slider({label:T('波包分离 g/σ','Packet separation g/σ'),min:.1,max:4,step:.05,value:g,format:v=>v.toFixed(2),oninput:v=>{g=v;draw();}});
+    const coherence=slider({label:T('退相干','Decoherence'),min:0,max:1,step:.01,value:0,format:v=>Math.round(v*100)+'%',oninput:v=>{decoherence=v;draw();}});
+    const population=slider({label:T('分支权重 P(↑)','Branch weight P(↑)'),min:0,max:1,step:.01,value:p,format:v=>v.toFixed(2),oninput:v=>{p=v;draw();}});
+    [separation,coherence,population].forEach(control=>control.input.addEventListener('input',stop));
+    const tabs=segmented([{value:true,label:T('相干读出 · 看干涉','Coherent readout · interference')},{value:false,label:T('直接读数 · 概率相加','Direct readout · probabilities add')}],value=>{stop();coherent=value;coherence.input.disabled=!value;play.disabled=!value;draw();});
+    play.addEventListener('click',()=>{
+      if(running){stop();return;}if(motion.matches){coherence.input.value=1;coherence.update();return;}
+      running=true;play.textContent=T('Ⅱ 暂停消退','Ⅱ Pause fading');play.setAttribute('aria-pressed','true');
+      if(decoherence>=.99){coherence.input.value=0;coherence.update();}
+      const initial=decoherence,start=performance.now();
+      const tick=now=>{coherence.input.value=Math.min(1,initial+(now-start)/3500);coherence.update();if(decoherence<1&&running)raf=requestAnimationFrame(tick);else stop();};raf=requestAnimationFrame(tick);
     });
-    hit.addEventListener('pointerleave', () => { tip.hide(); cross.style.opacity = 0; });
-    const s1 = slider({ label: T('测量强度 g/σ', 'strength g/σ'), min: 0.1, max: 4, step: 0.05, value: g, format: (v) => v.toFixed(2), oninput: (v) => { g = v; draw(); } });
-    const s2 = slider({ label: T('初态 |α|² = P(↑)', 'initial |α|² = P(↑)'), min: 0, max: 1, step: 0.01, value: p, format: (v) => v.toFixed(2), oninput: (v) => { p = v; draw(); } });
-    const header = h('div', { class: 'ifig-qc' },
-      h('span', { class: 'ifig-qc-q', text: T('量子', 'Quantum') }),
-      h('span', { class: 'ifig-qc-arrows' }, h('span', { class: 'to-c', text: T('测量 / 退相干 →', 'measurement / decoherence →') }), h('span', { class: 'to-q', text: T('← 量子化', '← quantization') })),
-      h('span', { class: 'ifig-qc-c', text: T('经典', 'Classical') }), badge);
-    const legend = h('div', { class: 'ifig-legend' },
-      h('span', {}, h('i', { class: 'k-total' }), T('总读数分布', 'total distribution')),
-      h('span', {}, h('i', { class: 'k-up' }), T('来自 |↑⟩', 'from |↑⟩')),
-      h('span', {}, h('i', { class: 'k-dn' }), T('来自 |↓⟩', 'from |↓⟩')));
-    const card = h('div', { class: 'ifig-card' }, header, h('div', { class: 'ifig-controls' }, s1.wrap, s2.wrap), box, legend, desc,
-      h('p', { class: 'ifig-note', text: T('冯·诺依曼测量模型：自旋 ½ 与高斯指针耦合，指针宽度 σ = 1。', 'Von Neumann measurement model: a spin-½ coupled to a Gaussian pointer of width σ = 1.') }));
-    fig.prepend(card);
-    s1.update(); s2.update();
+    const details=h('details',{class:'ifig-original'},h('summary',{text:T('模型与读出条件','Model and readout conditions')}),population.wrap,
+      h('p',{class:'ifig-note',text:T('两个高斯指针分支带有相对空间相位 5x；相干通道中按振幅相加，交叉项乘以剩余相干度 η=1−退相干。完全退相干或直接读数时，交叉项为零。曲线始终归一化，纵轴尺度固定。','The Gaussian branches carry relative spatial phase 5x. In the coherent channel, the interference term is multiplied by residual coherence η=1−decoherence. It vanishes for full decoherence or unconditioned direct readout. Curves remain normalized on a fixed vertical scale.')}),
+      h('a',{class:'text-link',href:'https://doi.org/10.1103/PhysRevA.65.033818',target:'_blank',rel:'noopener noreferrer',text:T('量子擦除与干涉的读出条件 ↗','Quantum erasure and interference readout ↗')}));
+    const card=h('div',{class:'ifig-card'},tabs,h('div',{class:'ifig-qc'},h('strong',{text:T('从条纹，到平滑的概率','From fringes to smooth probabilities')}),badge),
+      h('div',{class:'ifig-controls'},separation.wrap,coherence.wrap,play),h('div',{class:'ifig-plot'},svg),screen,
+      h('div',{class:'ifig-legend'},h('span',{},h('i',{class:'k-total'}),T('总读数','Total readout')),h('span',{},h('i',{class:'k-up'}),T('分支 ↑','Branch ↑')),h('span',{},h('i',{class:'k-dn'}),T('分支 ↓','Branch ↓'))),desc,readout,details);
+    fig.prepend(card);separation.update();coherence.update();population.update();
+    const hidden=()=>{if(document.hidden||motion.matches)stop();};document.addEventListener('visibilitychange',hidden);motion.addEventListener('change',hidden);
+    const observer=new IntersectionObserver(entries=>{if(!entries[0].isIntersecting)stop();});observer.observe(fig);
+    card.dispose=()=>{stop();observer.disconnect();document.removeEventListener('visibilitychange',hidden);motion.removeEventListener('change',hidden);};
     return card;
   }
+
 
   /* ======================================================================
      5. Research concept triangle (three electron–light processes)
@@ -641,6 +712,8 @@
     const [tx, ty] = P.topo;
     svg.append(s('ellipse', { cx: tx, cy: ty, rx: cx ? 80 : 130, ry: cx ? 44 : 60, fill: 'url(#ifc-core)', class: 'ifig-core' }));
     svg.append(s('text', { x: tx, y: ty + 7, 'text-anchor': 'middle', class: 'ifig-core-text', text: T('拓扑光子学', 'Topological photonics') }));
+    const topo = s('g', {class:'ifig-node',tabindex:0,role:'button','aria-label':T('拓扑光子学','Topological photonics')});
+    topo.append(...svg.querySelectorAll('.ifig-core, .ifig-core-text'));svg.append(topo);
     const chips = h('div', { class: 'ifig-chips' });
     for (const l of links) {
       const [x1, y1] = P[l.a], [x2, y2] = P[l.b];
@@ -667,9 +740,8 @@
         s('text', { x, y: y + 20, 'text-anchor': 'middle', class: 'ifig-node-year', text: n.sub }));
       nodeEls[id] = g; svg.append(g);
     }
-    const info = h('p', { class: 'ifig-desc' });
-    const dflt = T('将鼠标移到某个过程或连线上，查看它们之间的关系。', 'Hover or focus a process or a link to see how they relate.');
-    info.textContent = dflt;
+    const info = h('div', { class: 'ifig-context' });
+    showReading(info, guide?.concepts.pinem);
     const focusOn = (kind, id) => {
       const onN = new Set(), onL = new Set();
       if (kind === 'node') { onN.add(id); links.forEach((l) => { if (l.a === id || l.b === id) onL.add(l.id); }); }
@@ -678,117 +750,369 @@
       Object.entries(nodeEls).forEach(([k, el]) => el.classList.toggle('is-on', onN.has(k)));
       Object.entries(linkEls).forEach(([k, el]) => el.classList.toggle('is-on', onL.has(k)));
       Object.entries(labelEls).forEach(([k, el]) => el.classList.toggle('is-on', onL.has(k)));
-      if (kind === 'node') info.replaceChildren(h('strong', { text: `${nodes[id].name}　` }), nodes[id].text);
-      else { const l = links.find((x) => x.id === id); info.replaceChildren(h('strong', { text: `${l.label}　` }), l.text); }
+      showReading(info, guide?.concepts[id]);
     };
-    const clear = () => { svg.classList.remove('is-focus'); chips.classList.remove('is-focus'); info.textContent = dflt; };
     const bind = (el, kind, id) => {
       el.addEventListener('pointerenter', () => focusOn(kind, id)); el.addEventListener('focus', () => focusOn(kind, id));
-      el.addEventListener('pointerleave', clear); el.addEventListener('blur', clear); el.addEventListener('click', () => el.focus());
+      el.addEventListener('click', () => { el.focus(); focusOn(kind,id); });
+      el.addEventListener('keydown', e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();focusOn(kind,id);}});
     };
+    const selectTopo=()=>{svg.classList.remove('is-focus');showReading(info,guide?.concepts.topo);};
+    topo.addEventListener('pointerenter',selectTopo);topo.addEventListener('focus',selectTopo);topo.addEventListener('click',selectTopo);
+    topo.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();selectTopo();}});
     Object.entries(nodeEls).forEach(([k, el]) => bind(el, 'node', k));
     Object.entries(labelEls).forEach(([k, el]) => bind(el, 'link', k));
+    Object.entries(linkEls).forEach(([k, el]) => {
+      el.addEventListener('pointerenter', () => focusOn('link', k));
+      el.addEventListener('click', () => focusOn('link', k));
+    });
     const card = h('div', { class: 'ifig-card' }, svg, cx ? chips : null, info);
     fig.prepend(card);
     return card;
   }
 
   /* ======================================================================
-     6. Floquet engineering: driven lattice, quasienergy + discrete diffraction
+     6. Floquet engineering: driven two-band system
+        H(k,t) = E(k) σz + A cos(Ωt) σx,  E(k) = Δ/2 + B(1 − cos k)
+        Quasienergies from the truncated Floquet Hamiltonian (exact numerics).
      ====================================================================== */
+  // eigen-decomposition of a real symmetric matrix (cyclic Jacobi); returns {values, vectors[col]}
+  function jacobiEigen(Ain) {
+    const n = Ain.length, A = Ain.map((r) => r.slice()), V = Array.from({ length: n }, (_, i) => { const r = new Float64Array(n); r[i] = 1; return r; });
+    for (let sweep = 0; sweep < 50; sweep++) {
+      let off = 0;
+      for (let p = 0; p < n; p++) for (let q = p + 1; q < n; q++) off += A[p][q] * A[p][q];
+      if (off < 1e-20) break;
+      for (let p = 0; p < n; p++) for (let q = p + 1; q < n; q++) {
+        const apq = A[p][q];
+        if (Math.abs(apq) < 1e-14) continue;
+        const theta = (A[q][q] - A[p][p]) / (2 * apq);
+        const t = Math.sign(theta || 1) / (Math.abs(theta) + Math.sqrt(theta * theta + 1));
+        const c = 1 / Math.sqrt(t * t + 1), sn = t * c;
+        for (let k = 0; k < n; k++) { const akp = A[k][p], akq = A[k][q]; A[k][p] = c * akp - sn * akq; A[k][q] = sn * akp + c * akq; }
+        for (let k = 0; k < n; k++) { const apk = A[p][k], aqk = A[q][k]; A[p][k] = c * apk - sn * aqk; A[q][k] = sn * apk + c * aqk; }
+        for (let k = 0; k < n; k++) { const vkp = V[k][p], vkq = V[k][q]; V[k][p] = c * vkp - sn * vkq; V[k][q] = sn * vkp + c * vkq; }
+      }
+    }
+    return { values: A.map((r, i) => r[i]), vec: (j) => V.map((r) => r[j]) };
+  }
+
   function buildFloquet(fig, cx) {
-    let A = 1.0, Om = 7;
-    const NS_ = 20, ZMAX = 8;
-    // left: quasienergy band and Floquet replicas
-    const W = 420, H = 360, x0 = 48, y0 = 16, pw = 352, ph = 290, YR = [-6, 6];
-    const svg = svgRoot(W, H, T('周期驱动晶格的准能带', 'quasienergy bands of a driven lattice'));
+    const DELTA = 1, B = 0.5; // E(k) runs from Δ/2 = 0.5 to Δ/2 + 2B = 1.5
+    let A = 0.3, Om = 2.0, kSel = Math.PI / 2;
+    const E = (k) => DELTA / 2 + B * (1 - Math.cos(k));
+    const css = getComputedStyle(fig);
+    const hex = (name, fb) => { const m = css.getPropertyValue(name).trim().match(/^#?([0-9a-f]{6})$/i); const n = parseInt(m ? m[1] : fb, 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
+    const cLow = hex('--color-fig-green', '0d7d5a'), cUp = hex('--color-fig-warm', 'c4532a');
+    const mix = (u) => `rgb(${cLow.map((l, i) => Math.round(l + (cUp[i] - l) * u)).join(',')})`;
+
+    // left: quasienergy spectrum
+    const W = 420, H = 380, x0 = 48, y0 = 16, pw = 352, ph = 300, YR = [-2, 2];
+    const svg = svgRoot(W, H, T('驱动两能带系统的准能谱', 'quasienergy spectrum of a driven two-band system'));
     const { sx, sy } = plotArea(svg, { x0, y0, w: pw, hgt: ph, xr: [-Math.PI, Math.PI], yr: YR });
     const zone = s('rect', { x: x0, width: pw, class: 'ifig-zone' });
     svg.prepend(zone);
     [[-Math.PI, '−π'], [0, '0'], [Math.PI, 'π']].forEach(([v, l]) => svg.append(s('text', { x: sx(v), y: y0 + ph + 20, 'text-anchor': 'middle', class: 'ifig-tick', text: l })));
+    [-2, -1, 0, 1, 2].forEach((v) => svg.append(s('text', { x: x0 - 8, y: sy(v) + 4, 'text-anchor': 'end', class: 'ifig-tick', text: String(v) })));
     svg.append(s('text', { x: x0 + pw, y: y0 + ph + 40, 'text-anchor': 'end', class: 'ifig-axis-label', text: 'k' }));
-    svg.append(s('text', { x: x0 - 10, y: y0 + 8, 'text-anchor': 'end', class: 'ifig-axis-label', text: 'ε' }));
-    const zoneLbl = s('text', { x: x0 + 6, class: 'ifig-cap' });
-    const repl = s('g'), main = s('path', { class: 'ifig-band' }), orig = s('path', { class: 'ifig-light' });
-    const omTop = s('text', { x: x0 - 8, 'text-anchor': 'end', class: 'ifig-tick' }), omBot = s('text', { x: x0 - 8, 'text-anchor': 'end', class: 'ifig-tick' });
-    svg.append(orig, repl, main, zoneLbl, omTop, omBot);
-    // right: discrete diffraction heat map
-    const box = h('div', { class: 'ifig-plot ifig-heat' });
-    const canvas = h('canvas', { width: 41 * 8, height: 240, 'aria-label': T('光在波导阵列中的离散衍射', 'discrete diffraction in a waveguide array'), role: 'img' });
-    const heatAxis = h('div', { class: 'ifig-heat-axis' }, h('span', { text: T('← 波导序号 n →', '← waveguide n →') }), h('span', { text: T('传播距离 z ↓', 'propagation z ↓') }));
-    box.append(h('div', { class: 'ifig-heat-title', text: T('从中间一根波导注入光：', 'Light launched into the central waveguide:') }), canvas, heatAxis);
+    svg.append(s('text', { x: x0 - 26, y: y0 + ph / 4 + 6, 'text-anchor': 'end', class: 'ifig-axis-label', text: 'ε' }));
+    const bare = s('g'), dots = s('g');
+    const cross = s('line', { y1: y0, y2: y0 + ph, class: 'ifig-cross' });
+    const hit = s('rect', { x: x0, y: y0, width: pw, height: ph, class: 'ifig-hit', tabindex: 0, role: 'slider', 'aria-valuemin': '-3.14', 'aria-valuemax': '3.14', 'aria-label': T('准能谱：用方向键选择 k', 'Quasienergy spectrum: use arrow keys to choose k') });
+    const clipId = 'ifq-clip-' + Math.random().toString(36).slice(2, 7);
+    const cdefs = s('defs'); cdefs.append(s('clipPath', { id: clipId }, s('rect', { x: x0, y: y0, width: pw, height: ph })));
+    bare.setAttribute('clip-path', `url(#${clipId})`); dots.setAttribute('clip-path', `url(#${clipId})`);
+    svg.append(cdefs, bare, dots, cross, hit);
+    const box = h('div', { class: 'ifig-plot' }, svg);
     const tip = tooltip(box);
+
+    // right: upper-band population over time at the chosen k
+    const W2 = 420, H2 = 380, ax0 = 44, ay0 = 44, apw = 356, aph = 272;
+    const svg2 = svgRoot(W2, H2, T('上能带布居随时间的变化', 'upper-band population versus time'));
+    const pa = plotArea(svg2, { x0: ax0, y0: ay0, w: apw, hgt: aph, xr: [0, 1], yr: [0, 1] });
+    [0, 0.5, 1].forEach((v) => { svg2.append(s('line', { x1: ax0, x2: ax0 + apw, y1: pa.sy(v), y2: pa.sy(v), class: 'ifig-grid' })); svg2.append(s('text', { x: ax0 - 8, y: pa.sy(v) + 4, 'text-anchor': 'end', class: 'ifig-tick', text: String(v) })); });
+    const popLine = s('path', { class: 'ifig-pop' });
+    const popTitle = s('text', { x: ax0, y: 22, class: 'ifig-cap' });
+    const popX = s('text', { x: ax0 + apw, y: ay0 + aph + 22, 'text-anchor': 'end', class: 'ifig-axis-label' });
+    const timeTicks = [0, 0.5, 1].map(fraction => s('text', { x: ax0 + fraction * apw, y: ay0 + aph + 20, 'text-anchor': fraction === 0 ? 'start' : fraction === 1 ? 'end' : 'middle', class: 'ifig-tick' }));
+    popX.setAttribute('y', ay0 + aph + 45);
+    svg2.append(popLine, popTitle, popX, ...timeTicks);
     const readout = h('p', { class: 'ifig-desc' });
-    let Jeff = 1, field = [];
-    function draw() {
-      Jeff = besselJ(0, A);
-      const half = Om / 2;
-      zone.setAttribute('y', sy(Math.min(half, YR[1]))); zone.setAttribute('height', sy(Math.max(-half, YR[0])) - sy(Math.min(half, YR[1])));
-      zoneLbl.setAttribute('y', sy(half) + 16); zoneLbl.textContent = T('Floquet 布里渊区', 'Floquet zone');
-      omTop.setAttribute('y', sy(half) + 4); omTop.textContent = 'ħΩ/2';
-      omBot.setAttribute('y', sy(-half) + 4); omBot.textContent = '−ħΩ/2';
-      const ks = linspace(-Math.PI, Math.PI, 161);
-      const band = (n) => ks.map((k) => [sx(k), sy(-2 * Jeff * Math.cos(k) + n * Om)]);
-      main.setAttribute('d', pathOf(band(0)));
-      orig.setAttribute('d', pathOf(ks.map((k) => [sx(k), sy(-2 * Math.cos(k))])));
-      repl.replaceChildren(...[-2, -1, 1, 2].filter((n) => Math.abs(n * Om) - 2 < YR[1]).map((n) => s('path', { d: pathOf(band(n).filter((p) => p[1] >= y0 && p[1] <= y0 + ph)), class: 'ifig-replica' })));
-      // diffraction |ψ_n(z)|² = J_n(2 J_eff z)²
-      const ctx = canvas.getContext('2d');
-      if (!ctx) throw new Error('canvas 2D context unavailable');
-      const cw = canvas.width / (2 * NS_ + 1), rows = canvas.height;
-      const img = ctx.createImageData(canvas.width, rows);
-      const css = getComputedStyle(fig);
-      const hex = (v) => { const m = v.trim().match(/^#?([0-9a-f]{6})$/i); const n = parseInt(m ? m[1] : '0d7d5a', 16); return [(n >> 16) & 255, (n >> 8) & 255, n & 255]; };
-      const hi = hex(css.getPropertyValue('--color-fig-green')), lo = [255, 255, 255];
-      field = [];
-      for (let r = 0; r < rows; r++) {
-        const z = r / (rows - 1) * ZMAX, row = [];
-        for (let n = -NS_; n <= NS_; n++) row.push(besselJ(n, 2 * Jeff * z) ** 2);
-        field.push(row);
-        for (let c = 0; c < 2 * NS_ + 1; c++) {
-          const t = Math.sqrt(Math.min(1, row[c]));
-          const col = lo.map((l, i) => Math.round(l + (hi[i] - l) * t));
-          for (let px = Math.floor(c * cw); px < Math.floor((c + 1) * cw); px++) {
-            const o = (r * canvas.width + px) * 4; img.data[o] = col[0]; img.data[o + 1] = col[1]; img.data[o + 2] = col[2]; img.data[o + 3] = 255;
+
+    let spectrum = []; // per k: [{e, wUp, wDn}]
+    const KS = linspace(0, Math.PI, cx ? 61 : 75); // E(k) is even in k: compute half, mirror
+    function computeSpectrum() {
+      const M = Math.min(9, Math.ceil(2.2 / Om) + 3), nb = 2 * M + 1, n = 2 * nb;
+      spectrum = KS.map((k) => {
+        const e = E(k);
+        const Hm = Array.from({ length: n }, () => new Array(n).fill(0));
+        for (let b = 0; b < nb; b++) {
+          const m = b - M;
+          Hm[2 * b][2 * b] = e + m * Om; // upper band, photon index m
+          Hm[2 * b + 1][2 * b + 1] = -e + m * Om; // lower band
+          if (b + 1 < nb) { // A cos(Ωt) σx couples m ↔ m±1 with amplitude A/2
+            Hm[2 * b][2 * (b + 1) + 1] = Hm[2 * (b + 1) + 1][2 * b] = A / 2;
+            Hm[2 * b + 1][2 * (b + 1)] = Hm[2 * (b + 1)][2 * b + 1] = A / 2;
           }
         }
-      }
-      ctx.putImageData(img, 0, 0);
-      const loc = Math.abs(Jeff) < 0.03;
-      readout.replaceChildren(h('strong', {}, 'J', h('sub', { text: 'eff' }), ' / J = J', h('sub', { text: '0' }), `(A) = ${fmt(Jeff, 3)} · `),
-        loc ? T('动力学局域化：等效耦合几乎为零，能带变平，光停留在注入的那根波导里，不再扩散。', 'Dynamic localization: the effective coupling vanishes, the band flattens and light stays in the launch waveguide.')
-          : Jeff < 0 ? T('等效耦合变号：能带上下翻转，离散衍射仍然发生。', 'The effective coupling changes sign: the band flips, and discrete diffraction continues.')
-            : T('驱动削弱了等效耦合：能带变窄，光在阵列中扩散得更慢。', 'The drive weakens the effective coupling: the band narrows and light spreads more slowly.'));
+        const { values, vec } = jacobiEigen(Hm);
+        const out = [];
+        values.forEach((val, j) => {
+          if (val < -Om / 2 || val >= Om / 2) return; // keep the central Floquet zone (best converged)
+          const v = vec(j);
+          // replica shifted by pΩ has photon-0 weight equal to the original's weight at m = −p
+          for (let p = -8; p <= 8; p++) {
+            const ev = val + p * Om;
+            if (ev < YR[0] - 0.05 || ev > YR[1] + 0.05) continue;
+            const b = -p + M;
+            if (b < 0 || b >= nb) continue;
+            out.push({ e: ev, wUp: v[2 * b] ** 2, wDn: v[2 * b + 1] ** 2 });
+          }
+        });
+        return out;
+      });
     }
-    canvas.addEventListener('pointermove', (e) => {
-      const r = canvas.getBoundingClientRect();
-      const c = Math.min(2 * NS_, Math.max(0, Math.floor((e.clientX - r.left) / r.width * (2 * NS_ + 1))));
-      const row = Math.min(field.length - 1, Math.max(0, Math.floor((e.clientY - r.top) / r.height * field.length)));
+    function drawSpectrum() {
+      zone.setAttribute('y', sy(Math.min(Om / 2, YR[1]))); zone.setAttribute('height', sy(Math.max(-Om / 2, YR[0])) - sy(Math.min(Om / 2, YR[1])));
+      // uncoupled ladder ±E(k) + nΩ
+      const ks = linspace(-Math.PI, Math.PI, 121), paths = [];
+      for (let nn = -8; nn <= 8; nn++) for (const sgn of [1, -1]) {
+        const pts = ks.map((k) => [sx(k), sy(sgn * E(k) + nn * Om)]);
+        if (pts.some((q) => q[1] > y0 && q[1] < y0 + ph)) paths.push(s('path', { d: pathOf(pts), class: 'ifig-replica' }));
+      }
+      bare.replaceChildren(...paths);
+      const nodes = [];
+      KS.forEach((k, i) => {
+        for (const kk of k === 0 ? [0] : [k, -k]) for (const q of spectrum[i]) {
+          const w = q.wUp + q.wDn;
+          nodes.push(s('circle', { cx: sx(kk).toFixed(1), cy: sy(q.e).toFixed(1), r: cx ? 2.6 : 2.2, fill: mix(w > 1e-9 ? q.wUp / w : 0.5), 'fill-opacity': Math.max(0.1, Math.min(1, w * 1.15)).toFixed(2) }));
+        }
+      });
+      dots.replaceChildren(...nodes);
+    }
+    // time evolution at one k (RK4, starts in the lower band)
+    function evolve(k) {
+      const e = E(k), Tdrive = 2 * Math.PI / Om;
+      const tMax = Math.min(160, 3 * 2 * Math.PI / Math.max(A, 0.12));
+      const dt = Math.min(Tdrive, Math.PI / e) / 40, steps = Math.ceil(tMax / dt), every = Math.max(1, Math.floor(steps / 400));
+      let ur = 0, ui = 0, dr = 1, di = 0; // ψ = (up, down)
+      const f = (t, s) => { // i dψ/dt = Hψ  →  dψ/dt = −i Hψ
+        const c = A * Math.cos(Om * t);
+        const hu_r = e * s[0] + c * s[2], hu_i = e * s[1] + c * s[3];
+        const hd_r = -e * s[2] + c * s[0], hd_i = -e * s[3] + c * s[1];
+        return [hu_i, -hu_r, hd_i, -hd_r];
+      };
+      const pts = [];
+      let st = [ur, ui, dr, di];
+      for (let i = 0; i <= steps; i++) {
+        const t = i * dt;
+        if (i % every === 0) pts.push([t, st[0] ** 2 + st[1] ** 2]);
+        const k1 = f(t, st), s2 = st.map((v, j) => v + dt / 2 * k1[j]);
+        const k2 = f(t + dt / 2, s2), s3 = st.map((v, j) => v + dt / 2 * k2[j]);
+        const k3 = f(t + dt / 2, s3), s4 = st.map((v, j) => v + dt * k3[j]);
+        const k4 = f(t + dt, s4);
+        st = st.map((v, j) => v + dt / 6 * (k1[j] + 2 * k2[j] + 2 * k3[j] + k4[j]));
+      }
+      return { pts, tMax };
+    }
+    const resonance = (k) => { // nearest odd-photon resonance 2E = nΩ
+      const r = 2 * E(k) / Om, n = Math.max(1, 2 * Math.round((r - 1) / 2) + 1);
+      return { n, detune: 2 * E(k) - n * Om };
+    };
+    function pick(k) {
+      kSel = k;
+      cross.setAttribute('x1', sx(k)); cross.setAttribute('x2', sx(k));
+      const { pts, tMax } = evolve(Math.abs(k));
+      timeTicks.forEach((tick, i) => { tick.textContent = fmt(i * tMax / 2, 1); });
+      popLine.setAttribute('d', pathOf(pts.map(([t, p]) => [ax0 + t / tMax * apw, pa.sy(p)])));
+      const pMax = Math.max(...pts.map((q) => q[1]));
+      const { n, detune } = resonance(k);
+      popTitle.textContent = T(`k = ${fmt(k)}：上能带布居，最大 ${(pMax * 100).toFixed(0)}%`, `k = ${fmt(k)}: upper-band population, max ${(pMax * 100).toFixed(0)}%`);
+      popX.textContent = T('时间 t →', 'time t →');
+      hit.setAttribute('aria-valuenow', fmt(k));
+      hit.setAttribute('aria-valuetext', `k = ${fmt(k)}, ${(pMax * 100).toFixed(0)}%`);
+      const near = Math.abs(detune) < Math.max(0.6 * A, 0.04);
+      readout.replaceChildren(h('strong', { text: `k = ${fmt(k)} · ` }),
+        A === 0 ? T('驱动为零：两条能带不耦合，电子保持在下能带，上能带布居为零。', 'Zero drive: the bands are uncoupled; the electron stays in the lower band and the upper-band population is zero.')
+          : near ? T(`接近${n === 1 ? '单光子' : ` ${n} 光子`}共振（2E = ${n === 1 ? '' : n}ħΩ）：驱动把电子在两条能带之间来回搬运（Rabi 振荡），准能谱在这里打开 Floquet 能隙。`, `near the ${n === 1 ? 'one' : n}-photon resonance (2E = ${n === 1 ? '' : n}ħΩ): the drive moves the electron back and forth between the bands (Rabi oscillation), and a Floquet gap opens here.`)
+          : T('远离共振：电子基本留在下能带，只有小幅振荡。', 'off resonance: the electron stays mostly in the lower band, with small oscillations.'));
+      return [[`k = ${fmt(k)}`, ''], [`${(pMax * 100).toFixed(0)}%`, T('上能带最大布居', 'max upper-band population')]];
+    }
+    const summary = h('p', { class: 'ifig-note' });
+    function updateSummary() {
+      const lo = DELTA, hi = DELTA + 4 * B; // one-photon resonance window for Ω
+      let txt;
+      if (A === 0) txt = T('驱动强度 A = 0：显示未耦合的能带及其 Floquet 复本，交叉处没有驱动打开的能隙。', 'Drive A = 0: uncoupled bands and their Floquet replicas; no drive-induced gaps open at their crossings.');
+      else if (Om > hi) txt = T(`ħΩ = ${fmt(Om)} 大于两能带的最大能量差 ${fmt(hi)}：复本彼此分开，没有共振，能带几乎不受影响。把频率调小试试。`, `ħΩ = ${fmt(Om)} exceeds the largest band separation ${fmt(hi)}: replicas stay apart and nothing resonates. Try lowering the frequency.`);
+      else if (Om >= lo) { const kr = Math.acos(1 - (Om / 2 - DELTA / 2) / B); txt = T(`单光子共振出现在 k = ±${fmt(kr)}：上能带的复本与下能带交叉处被驱动耦合打开，能隙约为 A = ${fmt(A)}（旋转波近似）。`, `One-photon resonance at k = ±${fmt(kr)}: where the replica of the upper band crosses the lower band, the drive opens a gap of about A = ${fmt(A)} (rotating-wave approximation).`); }
+      else txt = T(`频率较低，复本更密：出现多光子共振，能隙随阶数迅速变小。这个模型里只有奇数光子共振能打开能隙（宇称选择定则）。`, `At low frequency the replicas crowd together: multi-photon resonances appear, with gaps shrinking quickly with order. In this model only odd-photon resonances open gaps (a parity selection rule).`);
+      summary.textContent = txt;
+    }
+    let raf = 0, sweepRaf = 0, sweeping = false, lastSweepFrame = 0;
+    const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const redraw = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        if (!fig.isConnected) return;
+        computeSpectrum(); drawSpectrum(); updateSummary(); pick(kSel);
+      });
+    };
+    hit.addEventListener('pointermove', (e) => {
+      const p = svgPoint(svg, e);
+      const lines = pick(Math.min(Math.PI, Math.max(-Math.PI, -Math.PI + (p.x - x0) / pw * 2 * Math.PI)));
       const [lx, ly] = localXY(box, e);
-      tip.show([[(field[row][c] * 100).toFixed(1) + '%', T('光强', 'intensity')], [`n = ${c - NS_}`, `z = ${fmt(row / (field.length - 1) * ZMAX, 1)}`]], lx, ly);
+      tip.show(lines, lx, ly);
     });
-    canvas.addEventListener('pointerleave', () => tip.hide());
-    const s1 = slider({ label: T('驱动强度 A', 'drive A'), min: 0, max: 6, step: 0.05, value: A, format: (v) => v.toFixed(2), oninput: (v) => { A = v; draw(); } });
-    const s2 = slider({ label: T('驱动频率 ħΩ / J', 'drive ħΩ / J'), min: 5, max: 10, step: 0.1, value: Om, format: (v) => v.toFixed(1), oninput: (v) => { Om = v; draw(); } });
-    const loc = h('button', { type: 'button', class: 'ifig-play', text: T('跳到局域化点 A ≈ 2.405', 'Jump to localization A ≈ 2.405') });
-    loc.addEventListener('click', () => { s1.input.value = 2.405; s1.update(); });
+    hit.addEventListener('pointerleave', () => tip.hide());
+    hit.addEventListener('keydown', (e) => {
+      const step = { ArrowRight: 0.05, ArrowUp: 0.05, ArrowLeft: -0.05, ArrowDown: -0.05 }[e.key];
+      if (step === undefined) return;
+      e.preventDefault(); pick(Math.min(Math.PI, Math.max(-Math.PI, kSel + step)));
+    });
+    const s1 = slider({ label: T('驱动强度 A', 'drive A'), min: 0, max: 0.8, step: 0.01, value: A, format: (v) => v.toFixed(2), oninput: (v) => { A = v; redraw(); } });
+    const s2 = slider({ label: T('驱动频率 ħΩ', 'drive ħΩ'), min: 0.5, max: 3.5, step: 0.01, value: Om, format: (v) => v.toFixed(2), oninput: (v) => { Om = v; redraw(); } });
+    const demo = h('button', { type: 'button', class: 'ifig-play', 'aria-pressed': 'false', text: T('▶ 扫描驱动频率', '▶ Sweep the frequency') });
+    const stopSweep = () => {
+      cancelAnimationFrame(sweepRaf);
+      sweepRaf = 0;
+      sweeping = false;
+      demo.textContent = T('▶ 扫描驱动频率', '▶ Sweep the frequency');
+      demo.setAttribute('aria-pressed', 'false');
+    };
+    demo.addEventListener('click', () => {
+      if (sweeping) { stopSweep(); return; }
+      if (motionPreference.matches) { s2.input.value = 2; s2.update(); return; }
+      sweeping = true;
+      demo.textContent = T('Ⅱ 暂停扫描', 'Ⅱ Pause sweep');
+      demo.setAttribute('aria-pressed', 'true');
+      const t0 = performance.now(), dur = 6000, from = 3.4, to = 0.6;
+      lastSweepFrame = 0;
+      const tick = (now) => {
+        if (!sweeping || document.hidden || !fig.isConnected) { stopSweep(); return; }
+        const u = Math.min(1, (now - t0) / dur);
+        // The spectrum requires diagonalization; cap updates at 12.5 Hz.
+        if (now - lastSweepFrame >= 80 || u === 1) {
+          lastSweepFrame = now;
+          s2.input.value = (from + (to - from) * u).toFixed(2);
+          s2.update();
+        }
+        if (u < 1) sweepRaf = requestAnimationFrame(tick); else stopSweep();
+      };
+      sweepRaf = requestAnimationFrame(tick);
+    });
+    [s1.input, s2.input].forEach(input => input.addEventListener('input', stopSweep));
+    const onVisibility = () => { if (document.hidden) stopSweep(); };
+    const onMotion = () => { if (motionPreference.matches) stopSweep(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    motionPreference.addEventListener('change', onMotion);
+    const visibility = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) stopSweep();
+    });
+    visibility.observe(fig);
     const header = h('div', { class: 'ifig-qc' },
       h('span', { class: 'ifig-chip is-static', text: T('经典波 · ε(r,t)', 'classical waves · ε(r,t)') }),
       h('span', { class: 'ifig-chip is-static', text: T('量子波 · A(r,t)·p̂', 'quantum waves · A(r,t)·p̂') }),
-      h('span', { class: 'ifig-note', text: T('同一套周期驱动的数学适用于两者；这里以弯曲波导阵列中的光为例。', 'The same periodic-drive mathematics applies to both; here, light in a curved waveguide array.') }));
+      h('span', { class: 'ifig-note', text: T('同一套周期驱动的数学适用于两者；这里以两条能带之间的周期驱动为例：驱动频率降低时，能带的 Floquet 复本相互交叉并发生耦合。', 'The same periodic-drive mathematics applies to both; here, a periodic drive between two bands: as the frequency decreases, Floquet replicas of the bands cross and couple.') }));
     const legend = h('div', { class: 'ifig-legend' },
-      h('span', {}, h('i', { class: 'k-band' }), T('驱动后的准能带', 'driven quasienergy band')),
-      h('span', {}, h('i', { class: 'k-replica' }), T('Floquet 复本（±nħΩ）', 'Floquet replicas (±nħΩ)')),
-      h('span', {}, h('i', { class: 'k-light' }), T('未驱动能带', 'undriven band')));
-    const card = h('div', { class: 'ifig-card' }, header, h('div', { class: 'ifig-controls' }, s1.wrap, s2.wrap, loc),
-      h('div', { class: 'ifig-two' }, h('div', { class: 'ifig-plot' }, svg), box), legend, readout,
-      h('p', { class: 'ifig-note' }, T('紧束缚晶格在高频驱动下的有效模型：等效耦合 J', 'Effective high-frequency model of a driven tight-binding lattice: J'), h('sub', { text: 'eff' }), ' = J·J', h('sub', { text: '0' }), T('(A)，第 n 根波导的光强为 J', '(A); intensity in waveguide n is J'), h('sub', { text: 'n' }), '²(2J', h('sub', { text: 'eff' }), T(' z)。示意计算，归一化单位。', ' z). Idealized, normalized units.')));
+      h('span', {}, h('i', { class: 'k-lower' }), T('下能带特征', 'lower-band character')),
+      h('span', {}, h('i', { class: 'k-upper' }), T('上能带特征', 'upper-band character')),
+      h('span', {}, h('i', { class: 'k-replica' }), T('未耦合的复本 ±E(k) + nħΩ', 'uncoupled replicas ±E(k) + nħΩ')),
+      h('span', {}, h('i', { class: 'k-zone' }), T('Floquet 布里渊区', 'Floquet zone')));
+    const card = h('div', { class: 'ifig-card' }, header, h('div', { class: 'ifig-controls' }, s1.wrap, s2.wrap, demo),
+      h('div', { class: 'ifig-two' }, box, h('div', { class: 'ifig-plot' }, svg2)), legend, summary, readout,
+      h('p', { class: 'ifig-note', text: T('模型：H(k,t) = E(k)σz + A cos(Ωt)σx，E(k) = Δ/2 + B(1 − cos k)，Δ = 1，B = 0.5。准能谱由截断的 Floquet 哈密顿量数值对角化得到；点的颜色表示上 / 下能带成分，深浅表示与未驱动能带的重叠。右图从下能带出发数值求解薛定谔方程。在左图上移动鼠标或用方向键选择 k。', 'Model: H(k,t) = E(k)σz + A cos(Ωt)σx with E(k) = Δ/2 + B(1 − cos k), Δ = 1, B = 0.5. Quasienergies come from numerically diagonalizing the truncated Floquet Hamiltonian; dot colour shows upper / lower-band character and opacity the overlap with the undriven bands. The right panel integrates the Schrödinger equation starting in the lower band. Move over the left plot, or use the arrow keys, to choose k.') }));
     fig.prepend(card);
-    s2.update(); s1.update();
+    card.dispose = () => {
+      stopSweep(); cancelAnimationFrame(raf); visibility.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
+      motionPreference.removeEventListener('change', onMotion);
+    };
+    s1.update(); s2.update();
     return card;
   }
 
-  const BUILDERS = { setup: buildSetup, kgap: buildKgap, anomaly: buildAnomaly, measurement: buildMeasurement, concepts: buildConcepts, floquet: buildFloquet };
+  /* Soliton localization: analytic envelopes, not a material-specific solver. */
+  function buildSoliton(fig) {
+    const model=window.LifeSolitonModel;if(!model)throw new Error('Soliton model unavailable');
+    let mode='space',frames=[],frame=0,raf=0,job=0,timer=0,playing=false,last=0,visibleNow=false,userPaused=false,disposed=false;
+    const motion=matchMedia('(prefers-reduced-motion: reduce)');
+    const canvas=h('canvas',{width:960,height:480,class:'ifig-soliton-stage',role:'img','aria-label':T('空间孤子的时空波面','Spacetime surface of a spatial soliton')});
+    const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas unavailable');
+    const heading=h('h3',{class:'ifig-soliton-headline'}),caption=h('p',{class:'ifig-soliton-caption'});
+    const phase=h('span',{class:'ifig-soliton-tag'});
+    const play=h('button',{type:'button',class:'ifig-play',text:T('载入波面…','Loading…'),disabled:''});
+    const css=getComputedStyle(fig),color=name=>css.getPropertyValue(name).trim();
+    const ink=color('--color-ink'),grid=color('--color-line'),green=color('--color-fig-green'),rose=color('--color-rose');
+    const project=(x,t,intensity)=>[95+(x+8)/16*650+t/16*170,410-t/16*205-intensity*155];
+    function draw(){
+      if(!frames.length)return;
+      const current=frames[frame],maximum=.5;
+      ctx.clearRect(0,0,960,480);ctx.lineJoin='round';ctx.lineCap='round';
+      const stroke=(pts,c,w,alpha=1)=>{ctx.globalAlpha=alpha;ctx.strokeStyle=c;ctx.lineWidth=w;ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();};
+      for(let x=-8;x<=8;x+=2)stroke([project(x,0,0),project(x,16,0)],grid,1,.5);
+      for(let t=0;t<=16;t+=2)stroke([project(-8,t,0),project(8,t,0)],grid,1,.5);
+      const tone=mode==='space'?green:rose;
+      // All slices come from the numerical envelope solution. The bright slice
+      // marks physical time; faint future slices provide a readable overview.
+      for(let index=frames.length-1;index>=0;index-=7){
+        const sample=frames[index],past=index<=frame;
+        const pts=sample.positions.map((x,i)=>project(x,sample.time,sample.values[i]/maximum));
+        if(past){ctx.globalAlpha=.045;ctx.fillStyle=tone;ctx.beginPath();const first=project(-8,sample.time,0);ctx.moveTo(...first);pts.forEach(p=>ctx.lineTo(...p));ctx.lineTo(...project(8,sample.time,0));ctx.closePath();ctx.fill();}
+        stroke(pts,tone,past?1.8:1,past?.5:.14);
+      }
+      // Longitudinal lines expose the temporal pulse's curved profile, rather
+      // than leaving a stack of horizontal slices that looks like a flat wall.
+      for(let x=-8;x<=8;x+=2){
+        const index=Math.round((x+8)/16*(current.values.length-1));
+        stroke(frames.filter((_,i)=>i%2===0).map(sample=>project(x,sample.time,sample.values[index]/maximum)),tone,1.5,.34);
+      }
+      const pts=current.positions.map((x,i)=>project(x,current.time,current.values[i]/maximum));
+      stroke(pts,color('--color-white'),7,.9);stroke(pts,tone,3.2);
+      stroke([project(-8,current.time,0),project(8,current.time,0)],ink,1.5,.35);
+      ctx.globalAlpha=1;
+      phase.textContent=mode==='space'?T('形状保持 · 空间局域','Shape preserved · localized in space'):
+        current.time<7?T('微弱种子正在放大','A weak seed is growing'):current.time<10.5?T('光集中成一个时间脉冲','Light forms a pulse in time'):T('脉冲经过，光场消退','The pulse passes and fades');
+      canvas.dataset.mode=mode;canvas.dataset.time=fmt(current.time);canvas.dataset.peak=String(current.peak);
+      canvas.setAttribute('aria-label',(mode==='space'?T('空间孤子：窄峰在演化中保持形状','Spatial soliton: a narrow peak keeps its shape'):T('时间孤子：场在一个时间窗口内集中出现','Temporal soliton: the field concentrates within a time window'))+' · t='+fmt(current.time));
+    }
+    const progress=slider({label:T('时间','Time'),min:0,max:16,step:.05,value:0,format:v=>v.toFixed(1),oninput:v=>{frame=Math.min(frames.length-1,Math.max(0,Math.round(v/.05)));draw();}});
+    function stop(){cancelAnimationFrame(raf);raf=0;playing=false;last=0;play.textContent=T('▶ 播放','▶ Play');play.setAttribute('aria-pressed','false');}
+    function start(){
+      if(play.disabled||motion.matches)return;
+      playing=true;play.textContent=T('Ⅱ 暂停','Ⅱ Pause');play.setAttribute('aria-pressed','true');let elapsed=frames[frame].time;
+      const tick=now=>{if(!playing)return;if(last)elapsed=(elapsed+Math.min(.1,(now-last)/1000)*2.0)%16;last=now;progress.input.value=elapsed;progress.update();raf=requestAnimationFrame(tick);};raf=requestAnimationFrame(tick);
+    }
+    function calculate(){
+      stop();clearTimeout(timer);const id=++job;frames=[];frame=0;play.disabled=true;progress.input.disabled=true;canvas.dataset.ready='false';
+      heading.textContent=mode==='space'?T('把光，留在一个位置。','Light, held in one place.'):T('让光，集中在一个瞬间。','Light, gathered into a moment.');
+      caption.textContent=mode==='space'?T('一座窄峰沿着时间延伸，波包始终保持局域。','A narrow ridge extends through time: the packet stays localized.'):
+        T('光场在空间铺开，却只在一段时间内汇成明亮脉冲。','The field extends across space, yet gathers into a bright pulse within a brief time window.');
+      const sim=model.create({profile:mode==='space'?'localized':'uniform',amplitude:mode==='space'?1/Math.sqrt(2):.0001});frames.push(sim.sample());
+      const batch=()=>{if(disposed||id!==job)return;for(let j=0;j<16&&frames.length<=320;j++)frames.push(sim.step(10));
+        if(frames.length<=320){timer=setTimeout(batch,0);return;}
+        frame=mode==='space'?95:195;progress.input.value=frames[frame].time;progress.update();play.disabled=false;progress.input.disabled=false;canvas.dataset.ready='true';
+        if(visibleNow&&!userPaused&&!motion.matches)start();
+      };timer=setTimeout(batch,0);
+    }
+    const tabs=segmented([{value:'space',label:T('空间孤子','Spatial soliton')},{value:'time',label:T('时间孤子','Temporal soliton')}],v=>{mode=v;calculate();});
+    play.addEventListener('click',()=>{if(playing){userPaused=true;stop();}else{userPaused=false;if(motion.matches){progress.input.value=(+progress.input.value+2)%16;progress.update();}else start();}});
+    progress.input.addEventListener('input',()=>{userPaused=true;stop();});
+    const detail=h('details',{class:'ifig-original'},h('summary',{text:T('这张图背后的物理','The physics behind the picture')}),
+      h('p',{class:'ifig-note',text:T('空间孤子选用保持形状的 Bragg 平衡态；时间孤子展示弱种子形成 k-gap 脉冲。波面高度表示强度，亮线标出当前时刻。底层沿用归一化包络方程的数值结果，图形只突出两种局域方式。','The spatial view uses a stationary Bragg state; the temporal view shows a weak seed forming a k-gap pulse. Height indicates intensity and the bright line marks the selected time. Both use numerical solutions of the normalized envelope equation.')}),
+      h('a',{class:'text-link',href:'https://doi.org/10.1103/q226-dkk4',target:'_blank',rel:'noopener noreferrer',text:T('张亮等 · 孤子形成与时空局域 ↗','Zhang et al. · Soliton formation and spacetime localization ↗')}));
+    const card=h('div',{class:'ifig-card ifig-soliton-simple'},tabs,heading,caption,canvas,
+      h('div',{class:'ifig-soliton-key'},h('span',{text:T('横向：位置','Across: position')}),h('span',{text:T('纵深：时间','Depth: time')}),phase),
+      h('div',{class:'ifig-controls ifig-soliton-transport'},play,progress.wrap),detail);
+    fig.prepend(card);calculate();
+    const hidden=()=>{if(document.hidden||motion.matches)stop();};document.addEventListener('visibilitychange',hidden);motion.addEventListener('change',hidden);
+    const observer=new IntersectionObserver(entries=>{visibleNow=entries[0].isIntersecting;if(!visibleNow)stop();else if(!userPaused&&!motion.matches&&!playing&&!play.disabled)start();},{threshold:.15});observer.observe(card);
+    card.dispose=()=>{disposed=true;job++;clearTimeout(timer);stop();observer.disconnect();document.removeEventListener('visibilitychange',hidden);motion.removeEventListener('change',hidden);};
+    return card;
+  }
+
+
+  const BUILDERS = { setup: buildSetup, kgap: buildKgap, anomaly: buildAnomaly, measurement: buildMeasurement, concepts: buildConcepts, floquet: buildFloquet, soliton:buildSoliton };
   const COMPACT = 560;
   const init = () => {
     document.querySelectorAll('figure[data-ifig]').forEach((fig) => {
@@ -801,12 +1125,13 @@
         if (cx === compact) return;
         compact = cx;
         // remove every card this figure owns, including a half-built one left by a failed build
-        const clearCards = () => fig.querySelectorAll(':scope > .ifig-card').forEach((c) => c.remove());
+        const clearCards = () => fig.querySelectorAll(':scope > .ifig-card').forEach((c) => { c.dispose?.(); c.remove(); });
         try {
           clearCards();
           card = null;
           card = build(fig, cx);
           if (!card) throw new Error('builder returned nothing');
+          addGuide(fig, card);
           card.classList.toggle('is-compact', cx);
           if (img) { img.hidden = true; img.style.display = 'none'; }
           fig.classList.add('is-interactive');

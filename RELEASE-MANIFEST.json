@@ -1,0 +1,468 @@
+{
+  "date": "2026-10-27",
+  "baseCommit": "35348ae3798ff2518227922a44c5c327306b8893",
+  "source": "Life-Group-Web-Claude",
+  "scope": "Website files copied from the integrated working tree; README additionally links release documents. Git metadata and delivery documents/scripts are outside this manifest.",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 48,
+      "sha256": "4038d3a043f80bdf653b1410bcaf8b68a75c432403297b0cbdd83d41b2ee2051"
+    },
+    {
+      "path": ".nojekyll",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "404.html",
+      "bytes": 3692,
+      "sha256": "73df98aa8bfa8015099813e6722500adcb58f12691b69a8a830bfcfbdb0101d7"
+    },
+    {
+      "path": "CNAME",
+      "bytes": 14,
+      "sha256": "a0a93f62ca48c2e2d22cdcfe61f8b217a3e6ca8957f94e1ea6f4f93d8ed04294"
+    },
+    {
+      "path": "README.md",
+      "bytes": 3942,
+      "sha256": "e7c9230d23c15091bdc9d145ef93d3bba16a396f24235142a321dbac4b03bf61"
+    },
+    {
+      "path": "ai4s.html",
+      "bytes": 25029,
+      "sha256": "e7b7fed9f5120e13622134952bf9a7daf0a76016daf3dce4688b87bf04dcde84"
+    },
+    {
+      "path": "ai4s.js",
+      "bytes": 4618,
+      "sha256": "b37f69d9d438842d14b831ed4a853f9c3f0de34d1f7fc2069e131f7b68e97905"
+    },
+    {
+      "path": "apple-touch-icon.png",
+      "bytes": 8417,
+      "sha256": "83fa29b116ff669719b87123bfbd721a6d486f191216173d5f4639001a7b9bba"
+    },
+    {
+      "path": "dmd-map.js",
+      "bytes": 3150,
+      "sha256": "0d84e719aaa050b150b1eb48ea5a659add861f318ee4ff27ecdbd5f975e77e6e"
+    },
+    {
+      "path": "en/404.html",
+      "bytes": 3743,
+      "sha256": "7d74d4bc37dc2352683f623fe561ae7647153ff797b556d463ee33c9e2fa5b2a"
+    },
+    {
+      "path": "en/ai4s.html",
+      "bytes": 26088,
+      "sha256": "326998f126dea7e64ed34efa87f6c89daa106055edb340cc6662186d618df69d"
+    },
+    {
+      "path": "en/index.html",
+      "bytes": 29047,
+      "sha256": "f54c4e0fabc55a8f0470ff082922167ee8fc66569d7c3fa8d86268d677e559b9"
+    },
+    {
+      "path": "en/interests.html",
+      "bytes": 9872,
+      "sha256": "391b41ae8aa59ed36fdf3a8ea095d28eed0a4099b3f5ceea9d9c48f35d105f44"
+    },
+    {
+      "path": "en/members/chaoran-ji.html",
+      "bytes": 3747,
+      "sha256": "13fe9c92aecde431e3ad781ca6b03c30e16afe57e72baf0a919bb972a513b74f"
+    },
+    {
+      "path": "en/members/chenhao-pan.html",
+      "bytes": 8521,
+      "sha256": "12dea1e550d689c18ed85a188bd6c91ee1533e45061c9bb94a14bff54a71a231"
+    },
+    {
+      "path": "en/members/danni-chen.html",
+      "bytes": 6810,
+      "sha256": "485a0001f22d23f8c56ad8b3419e0d8d484c635e1baa1bde89a8dca6e2fa61de"
+    },
+    {
+      "path": "en/members/guowei-chen.html",
+      "bytes": 5582,
+      "sha256": "2f40eb06c1ab012baed34ce6e9caf945acd7e9a09f547ddca640a1764bfae4e5"
+    },
+    {
+      "path": "en/members/jiaxiang-sun.html",
+      "bytes": 4690,
+      "sha256": "173b314f4dd1c8b2e198708c7c1d97fe8d42360bca4bf665983241b1da135c8c"
+    },
+    {
+      "path": "en/members/jinze-he.html",
+      "bytes": 7436,
+      "sha256": "330014f9da0f48fa02f86176971f322f4c99836d90184b576f87a4fe3998e3db"
+    },
+    {
+      "path": "en/members/liang-zhang.html",
+      "bytes": 8966,
+      "sha256": "9252b6780a62b1876d15acea5d48f89dc558846177dc010f7d939e878915803d"
+    },
+    {
+      "path": "en/members/ruoyu-chen.html",
+      "bytes": 4780,
+      "sha256": "a4f83abdd1c7c580cb0607231fe44f76a0453eb365ea269a20b646df22f3c949"
+    },
+    {
+      "path": "en/members/yiming-pan.html",
+      "bytes": 34411,
+      "sha256": "a209960d1a557d2b720b60ba396e41e3caa8f1340bc0906930727b4b644bec82"
+    },
+    {
+      "path": "en/members/yuheng-song.html",
+      "bytes": 3782,
+      "sha256": "b5f92a6d464090391f46570c34ed481244cfc4eb6bba0086e2c64b4977b07eac"
+    },
+    {
+      "path": "en/members/zeyi-wu.html",
+      "bytes": 3753,
+      "sha256": "08602e6d63a46ff45221e5bac337e146c468e7c76cf4175e224c7dc1a782c445"
+    },
+    {
+      "path": "en/members/zirui-zhao.html",
+      "bytes": 6773,
+      "sha256": "ce6519db1ae1d6a48d28d719d8e6bd02c7a35dfaee51e7c68f308240f56060ca"
+    },
+    {
+      "path": "en/members/zixuan-yue.html",
+      "bytes": 3798,
+      "sha256": "6f381e0d05227b9cb1050053485dfb865a028acd71ab0c879380e13ae3fcf5f8"
+    },
+    {
+      "path": "en/news.html",
+      "bytes": 18201,
+      "sha256": "b031b8a3df48352b1728ba3bed069d558d87c788641370815b5c9f41bee69030"
+    },
+    {
+      "path": "en/publications.html",
+      "bytes": 39412,
+      "sha256": "7484a672cb920e2b94e1b5157692b016ab7a1866e7ec860af8019704579f9a9a"
+    },
+    {
+      "path": "en/research.html",
+      "bytes": 14822,
+      "sha256": "b3ca1f85a56699f16e0f838dd752814d893257c8c72fdc60c234126465432c12"
+    },
+    {
+      "path": "favicon-32.png",
+      "bytes": 6611,
+      "sha256": "94247a2a91a886b8e836abe2611fbb3330e7b2ebd8721018c95efb073405cf18"
+    },
+    {
+      "path": "figure-guides.js",
+      "bytes": 15817,
+      "sha256": "ab38385ef94af2456770bf03c8115f51aaf38158a7a958a4639aa2ac0ab7d245"
+    },
+    {
+      "path": "figures.js",
+      "bytes": 85196,
+      "sha256": "ab20b9730d45709899fb4ff2c54547e64447c38403b01580727bd10421747a3f"
+    },
+    {
+      "path": "fonts/OFL-LICENSE.txt",
+      "bytes": 4314,
+      "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
+    },
+    {
+      "path": "fonts/source-serif-4-latin-wght-italic.woff2",
+      "bytes": 51516,
+      "sha256": "663e7ef3037a56dce81dfc33f68c1e6445995ffd8887991b3c0b68a7689c9da5"
+    },
+    {
+      "path": "fonts/source-serif-4-latin-wght-normal.woff2",
+      "bytes": 50824,
+      "sha256": "c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb"
+    },
+    {
+      "path": "header-motion.js",
+      "bytes": 5563,
+      "sha256": "0dd251e3aa3f953b64d8aa3491f9773452bff1f9e0bf523efbe08f314ca9eb5a"
+    },
+    {
+      "path": "icon-192.png",
+      "bytes": 10390,
+      "sha256": "9f4e8c6bf92a623e783f94ef92e990f9d38dbd326bcb0d59b9e0362f407b40e9"
+    },
+    {
+      "path": "icon-512.png",
+      "bytes": 18557,
+      "sha256": "2705d86f1cb8b206972607b10702e86d2d7dee7a62c775eaeee745e0c608d6f3"
+    },
+    {
+      "path": "images/ai4s/deeponet-paper-figure.webp",
+      "bytes": 238234,
+      "sha256": "82e53462e94e14735f6804011a72c9545e10a4e3a039fd2ba9eb6b6c9f4e4c04"
+    },
+    {
+      "path": "images/ai4s/deeponet.webp",
+      "bytes": 96504,
+      "sha256": "b482ef8f1edd50cb372c9cf8e5ab254b64068cee444b35d2e48a58afe7b0f475"
+    },
+    {
+      "path": "images/ai4s/dmd-overview-v2.webp",
+      "bytes": 237686,
+      "sha256": "54961cf6bbc031ff40fa198192f9fa5f5b15b08908d3d339bedbc7d8cc252ec8"
+    },
+    {
+      "path": "images/ai4s/dmd-overview.webp",
+      "bytes": 127974,
+      "sha256": "4cd200b32ac147b7d880290084fbe514c40dee7db273d472b69182ca71582c9f"
+    },
+    {
+      "path": "images/ai4s/localization-paper-figure.webp",
+      "bytes": 301574,
+      "sha256": "b2b6688c0c07a11e1c665ccec026c81cd0c33b6fe0b4418e0b095366e81b8bc8"
+    },
+    {
+      "path": "images/ai4s/localization.webp",
+      "bytes": 99016,
+      "sha256": "b9ee5c9bc7b9a2cf8cb3526207ae5ec0cd3724c527994debf9b94a8a1c627b15"
+    },
+    {
+      "path": "images/ai4s/pined-net.webp",
+      "bytes": 113162,
+      "sha256": "c4ebec47b2108a50d103bb07a967642f377aafe40a6668a3354d6daa5aff6435"
+    },
+    {
+      "path": "images/gap-soliton-comparison.webp",
+      "bytes": 223968,
+      "sha256": "776b0f28ef9fd2e5776dd807153ea62210232499530ae4e4b359f991b846c765"
+    },
+    {
+      "path": "images/group-cmmc-2025.webp",
+      "bytes": 203354,
+      "sha256": "e5b9addd7e83e4f94fa26dbc510a11db9955cd8fa369d46554431428939b333a"
+    },
+    {
+      "path": "images/group-gathering.webp",
+      "bytes": 126242,
+      "sha256": "352a538d51c4eaa4b7aae3c3b7ebf5b0e78d34688d91a98fe28101107afc9e9e"
+    },
+    {
+      "path": "images/k-gap-features.webp",
+      "bytes": 60296,
+      "sha256": "e8ccb8c8ffb50a9332613395306b144a5e85bb8d5fe4a2b2a2abea2aacaa33db"
+    },
+    {
+      "path": "images/member-0.webp",
+      "bytes": 10980,
+      "sha256": "285a7e7d1b664ddc4707515d78ee9f32f54aaf87543ec28fd8446081c69c5d63"
+    },
+    {
+      "path": "images/member-1.webp",
+      "bytes": 23050,
+      "sha256": "7463d495e619546aac40909ed3dd0c686ec7aff984da3e55a344fce3d7b1632c"
+    },
+    {
+      "path": "images/member-2.webp",
+      "bytes": 44746,
+      "sha256": "f15b6abbc8737ded6cc3bc434dbfdf2b822d3f736f1059caf449c2bd9d7d84f3"
+    },
+    {
+      "path": "images/member-3.webp",
+      "bytes": 27024,
+      "sha256": "d0048b6568fb6796e025f46f83204594da41c2564cd11e05c680592e9e050fbe"
+    },
+    {
+      "path": "images/member-4.webp",
+      "bytes": 8626,
+      "sha256": "3e923b70c13e14a19eaa7c26d84c4f9d2bd206e9529f0eb46ab2fb2094f9512b"
+    },
+    {
+      "path": "images/member-6.webp",
+      "bytes": 12500,
+      "sha256": "d4859c98f1a088949658bbdeee51f7c4643b7a5558c516cfe1b8d37aba3c59ad"
+    },
+    {
+      "path": "images/member-7.webp",
+      "bytes": 7688,
+      "sha256": "66c86628038ecc6f47b90b79f031173d6d4f3291587958c16ced93849ab0aac7"
+    },
+    {
+      "path": "images/original-2.webp",
+      "bytes": 37314,
+      "sha256": "64a21b0a523032a27f32e0bb91029053c807072f300bb68e5e01db40eb47039f"
+    },
+    {
+      "path": "images/original-3.webp",
+      "bytes": 46064,
+      "sha256": "11ed33ea5149556e2b04e8fd71264f8b048d1b9d67fd26820dd5bf1304ff729c"
+    },
+    {
+      "path": "images/original-4.webp",
+      "bytes": 19296,
+      "sha256": "315f64c36b0416942536e377822165137e6f7cd8c5c68313d44fb43cab601c19"
+    },
+    {
+      "path": "images/original-5.webp",
+      "bytes": 70692,
+      "sha256": "99c0a5c11737a0a116dd2f3f25ba90c242e036ade3eb94ff5e23822aa27aedfe"
+    },
+    {
+      "path": "images/original-6.webp",
+      "bytes": 20742,
+      "sha256": "f3e2a81e7d836003de12177852f1fe25fbcdeb0ddc009635d3270d27d2047af4"
+    },
+    {
+      "path": "images/original-7.webp",
+      "bytes": 34764,
+      "sha256": "0e409c108a23a1346c34ecfe5652f7a2cea7e581d59ad2a73e8554f944ff2774"
+    },
+    {
+      "path": "images/original-8.webp",
+      "bytes": 65900,
+      "sha256": "9ac4a59b15c4b55826bba2717dee2dd38786fe0f769c23515b2ec5d64274389c"
+    },
+    {
+      "path": "images/pinem-sidebands.svg",
+      "bytes": 17474,
+      "sha256": "2a1766cb02c5ab968babd5568cd667bfc7da1778ea8383196e17d23ecfae9ee6"
+    },
+    {
+      "path": "images/research-overview.webp",
+      "bytes": 560352,
+      "sha256": "64a3e7f04bc41a11b4960fa0ff66c69051f58544c50d2f6ca6a3400c0bdafa52"
+    },
+    {
+      "path": "images/yiming-pan.webp",
+      "bytes": 45250,
+      "sha256": "34c4f901a1e8e554ea0b144bf7a75de212b6f321a3db770c0f185882abb22058"
+    },
+    {
+      "path": "index.html",
+      "bytes": 27090,
+      "sha256": "f8fc2a89d309fb8880a3bb1659da35d674c6644f460c564d7ee61c429d28ea54"
+    },
+    {
+      "path": "interests.html",
+      "bytes": 9590,
+      "sha256": "4069c3e619a42082884c6d17b58a8f50bbfb64d3a665d266e875195116f501b6"
+    },
+    {
+      "path": "language.js",
+      "bytes": 357,
+      "sha256": "552225b8fcffc9ba27c666efc254f25f447ef5cc23502d50ecf0eeb0cc19eaf2"
+    },
+    {
+      "path": "members/chaoran-ji.html",
+      "bytes": 3611,
+      "sha256": "d92022f9a3f2a33fde4ab5fc9d7e0635319f4e0c8282386934193b9e35088906"
+    },
+    {
+      "path": "members/chenhao-pan.html",
+      "bytes": 8186,
+      "sha256": "422882ce1d9f80eb3bf2e3d316d40b4abc0866f1f4efb7bad9ad473832d2d380"
+    },
+    {
+      "path": "members/danni-chen.html",
+      "bytes": 6503,
+      "sha256": "4ba04f089e897a158a6c580a0788085fb417ec428a166c6ceb0e2500f3e3e330"
+    },
+    {
+      "path": "members/guowei-chen.html",
+      "bytes": 5327,
+      "sha256": "9a8f7b87026bd3ce093eda6141f48d93f18fa33583ba662ff0c89de32b579ebd"
+    },
+    {
+      "path": "members/jiaxiang-sun.html",
+      "bytes": 4459,
+      "sha256": "f89d3ed2a018d09e72260b7f249cc3c4d8766b4f262cebce9f02506d5955f026"
+    },
+    {
+      "path": "members/jinze-he.html",
+      "bytes": 7186,
+      "sha256": "057fd5b43c104e8c736e472b3582abf3ca963d037ce5a54b11863a20a77ae584"
+    },
+    {
+      "path": "members/liang-zhang.html",
+      "bytes": 8544,
+      "sha256": "3de696378fbd326a21c3ef0087a934ed10757f75ea3b9a20c54d34da656a4d08"
+    },
+    {
+      "path": "members/ruoyu-chen.html",
+      "bytes": 4618,
+      "sha256": "d5e00ab837bc6176b735c4bef01f53fb0e0349de0bdf4974df6ff0aae3aa05ad"
+    },
+    {
+      "path": "members/yiming-pan.html",
+      "bytes": 32272,
+      "sha256": "1f062cd32880cb05d9f1406576ad8b242aacddf41676d596232d3742e0b5fa84"
+    },
+    {
+      "path": "members/yuheng-song.html",
+      "bytes": 3635,
+      "sha256": "c08700726556aad2079553da894ab7e53515dd25a04d8869a44c89dc3ff0f0f2"
+    },
+    {
+      "path": "members/zeyi-wu.html",
+      "bytes": 3613,
+      "sha256": "997d1511985ff9972e8d431951398b9d3c8531bd32b5590a8003be9ec91d1fe0"
+    },
+    {
+      "path": "members/zirui-zhao.html",
+      "bytes": 6460,
+      "sha256": "34bfe71c78cd53f05a14b0daaadffdbceb46e5f47c10346b9bf003e5319bbc83"
+    },
+    {
+      "path": "members/zixuan-yue.html",
+      "bytes": 3640,
+      "sha256": "7bf0d4af586bd07e5a3ca42bc584ca2b51866cde88e92e873d06b9da801ec78f"
+    },
+    {
+      "path": "news.html",
+      "bytes": 16874,
+      "sha256": "890396e2c9ff3784c0fde809a739d1bdc780a0474f9db798bdd250b4c3ac63f9"
+    },
+    {
+      "path": "news.js",
+      "bytes": 899,
+      "sha256": "c7e36073ab5bb1bd4d2088b601f4e5ff4a203b9ffcb6e46c852e18fdf0d72482"
+    },
+    {
+      "path": "pan-life-icon.svg",
+      "bytes": 264,
+      "sha256": "353588608854b12dbc59ab505860acbfa4e25250a26706bc0ef7b6696047112e"
+    },
+    {
+      "path": "publications.html",
+      "bytes": 38373,
+      "sha256": "7c05e89999eb6116f9beb26e8c548c9914afdaf7ce75124128ac3fabfedb9741"
+    },
+    {
+      "path": "research.html",
+      "bytes": 13689,
+      "sha256": "6a7a88cec7d2706af153b8ffab2e952f960f29cde58ee117aba74961caf9bbdc"
+    },
+    {
+      "path": "robots.txt",
+      "bytes": 67,
+      "sha256": "18a1e34458ecce6aa513c2631277110847c26a60fd25143b601fa1084001cba2"
+    },
+    {
+      "path": "site.css",
+      "bytes": 100143,
+      "sha256": "a0ab559b2579fbb9bdb6b3d87b4320ffe183df65bb57402a3968a4e7adae51ed"
+    },
+    {
+      "path": "site.webmanifest",
+      "bytes": 331,
+      "sha256": "4fbf72bf6a739d14ad7b36759c61284e757964e7f2855895842322faca136e67"
+    },
+    {
+      "path": "sitemap.xml",
+      "bytes": 4272,
+      "sha256": "00c41a440d4bbbbb5289019073fa491e35f1605ff7250a985306ad2b399441ce"
+    },
+    {
+      "path": "soliton-model.js",
+      "bytes": 3203,
+      "sha256": "2609e7d5e33950af8bef9c8e437a5ae8919246e13502d98bd0edb69e3b9e06ad"
+    }
+  ]
+}

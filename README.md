@@ -53,6 +53,7 @@ The original Next.js source code is not in this repository, so:
 | Chinese pages | `index.html`, `research.html`, `publications.html`, `news.html`, `interests.html`, `members/*.html` |
 | English pages | same names under `en/` (keep both languages in sync) |
 | All styles (one file, organised by section, colour variables at the top) | `site.css` |
+| AI4S × S4AI topic (bilingual) | `ai4s.html`, `en/ai4s.html`, `ai4s.js`, `dmd-map.js`, `images/ai4s/` |
 | Header, mobile menu, page index, back-to-top | `header-motion.js` |
 | Heading font (Source Serif 4, OFL, self-hosted) | `fonts/` |
 | Icons | `pan-life-icon.svg`, `favicon-32.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`, `site.webmanifest` |
@@ -73,3 +74,7 @@ not use `!important`.
 3. Update `<lastmod>` for changed pages in `sitemap.xml`.
 4. Preview locally with `python -m http.server` in this folder (pages use
    root-relative paths like `/fonts/...`, so opening the files directly will not load all styles).
+
+## 2026-10-27 local integration candidate
+
+This snapshot adds the bilingual AI4S × S4AI topic and refines scientific interactions. It is not yet committed or published. See [upgrade checklist](UPGRADE-CHECKLIST.md), [changelog](CHANGELOG.md), and [GitHub preparation](PUSH-README.md). Run `node scripts/verify.cjs` to verify this snapshot.
