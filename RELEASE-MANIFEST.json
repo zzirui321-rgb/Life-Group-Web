@@ -446,8 +446,8 @@
     },
     {
       "path": "site.css",
-      "bytes": 100143,
-      "sha256": "a0ab559b2579fbb9bdb6b3d87b4320ffe183df65bb57402a3968a4e7adae51ed"
+      "bytes": 104543,
+      "sha256": "81acce693d304347d269bff93970202a5eab5db56911f275b53d87291f8f1577"
     },
     {
       "path": "site.webmanifest",
