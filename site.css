@@ -3638,3 +3638,23 @@ img.img-cutout { background: transparent; border: 0; box-shadow: none; padding: 
   .ifig[data-ifig="setup"] .ifig-sub { padding-top:10px; margin-top:10px; }
   .ifig[data-ifig="soliton"] .ifig-soliton-stage { max-width:560px; }
 }
+
+.ai4s-banner,.ai4s-research-entry {
+  position:relative;
+  transition:transform .22s ease,box-shadow .22s ease,background .22s ease;
+}
+.ai4s-banner:hover,.ai4s-research-entry:hover,
+.ai4s-banner:focus-within,.ai4s-research-entry:focus-within {
+  transform:translateY(-3px);
+  background:var(--color-white);
+  box-shadow:var(--shadow-card);
+}
+.ai4s-banner .text-link::after,.ai4s-research-entry .text-link::after {
+  content:"";position:absolute;inset:0;z-index:3;border-radius:var(--radius-md);
+}
+.ai4s-banner:focus-within,.ai4s-research-entry:focus-within { outline:2px solid var(--color-focus);outline-offset:4px; }
+.hero .hero-spectrum { animation:none; }
+@media(prefers-reduced-motion:reduce) {
+  .ai4s-banner,.ai4s-research-entry { transition:none; }
+  .ai4s-banner:hover,.ai4s-research-entry:hover,.ai4s-banner:focus-within,.ai4s-research-entry:focus-within { transform:none; }
+}

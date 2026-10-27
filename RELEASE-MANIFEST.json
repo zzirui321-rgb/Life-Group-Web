@@ -31,8 +31,8 @@
     },
     {
       "path": "ai4s.html",
-      "bytes": 25029,
-      "sha256": "e7b7fed9f5120e13622134952bf9a7daf0a76016daf3dce4688b87bf04dcde84"
+      "bytes": 25760,
+      "sha256": "fe6a3be1ab2a7605118655a973604782b856db9e3c6bdb7434c7b39cc790101b"
     },
     {
       "path": "ai4s.js",
@@ -56,13 +56,13 @@
     },
     {
       "path": "en/ai4s.html",
-      "bytes": 26088,
-      "sha256": "326998f126dea7e64ed34efa87f6c89daa106055edb340cc6662186d618df69d"
+      "bytes": 26819,
+      "sha256": "93a582e9ddcece74b54a1d45519be7c151d12a2baa26ba5732e6ca503c327383"
     },
     {
       "path": "en/index.html",
-      "bytes": 29047,
-      "sha256": "f54c4e0fabc55a8f0470ff082922167ee8fc66569d7c3fa8d86268d677e559b9"
+      "bytes": 29095,
+      "sha256": "d734f4b535030d7fe5e36d71a6bcf1af2369462b785e26601bcced7fffc93fe0"
     },
     {
       "path": "en/interests.html",
@@ -336,8 +336,8 @@
     },
     {
       "path": "index.html",
-      "bytes": 27090,
-      "sha256": "f8fc2a89d309fb8880a3bb1659da35d674c6644f460c564d7ee61c429d28ea54"
+      "bytes": 27138,
+      "sha256": "00fb649295b8fe0089b33a38bb362eb4bf950a3ca904a922b77bda841f8f8aac"
     },
     {
       "path": "interests.html",
@@ -446,8 +446,8 @@
     },
     {
       "path": "site.css",
-      "bytes": 104543,
-      "sha256": "81acce693d304347d269bff93970202a5eab5db56911f275b53d87291f8f1577"
+      "bytes": 105430,
+      "sha256": "2fc6253b7f3176beda8a5818ffac80aedbc533696eea8b60ced0c7d5f869bff8"
     },
     {
       "path": "site.webmanifest",
@@ -463,6 +463,51 @@
       "path": "soliton-model.js",
       "bytes": 3203,
       "sha256": "2609e7d5e33950af8bef9c8e437a5ae8919246e13502d98bd0edb69e3b9e06ad"
+    },
+    {
+      "path": "hero-sidebands.js",
+      "bytes": 3395,
+      "sha256": "763790ee14cf61b1c4852758aa1ee9a51324facfe6d1e3dbe3d877e1ecf36612"
+    },
+    {
+      "path": "images/ai4s/deeponet-600.webp",
+      "bytes": 14496,
+      "sha256": "a47516cfeab059d357f6ba1979181a40c223dc0364890441b48589e663568a38"
+    },
+    {
+      "path": "images/ai4s/dmd-overview-600.webp",
+      "bytes": 19410,
+      "sha256": "7e895c4dc26f297a5c33ae40f5fcf18c067bf2433cb6180c3191f3a3e3ebdd9b"
+    },
+    {
+      "path": "images/ai4s/localization-600.webp",
+      "bytes": 17660,
+      "sha256": "d04b299253b254db1f1951927567777a7233c604082bb90cf6de1f8643c59471"
+    },
+    {
+      "path": "images/ai4s/pined-net-600.webp",
+      "bytes": 16992,
+      "sha256": "495d2fe828163eb38ccb49cb74ba40424c3f53dfc1db07b1efa1b80922702e11"
+    },
+    {
+      "path": "images/ai4s/deeponet-1000.webp",
+      "bytes": 32110,
+      "sha256": "76563bbe87f564cc34300e176261e1fa141f7fe47f3fa42e43979371a05b7526"
+    },
+    {
+      "path": "images/ai4s/dmd-overview-1000.webp",
+      "bytes": 41480,
+      "sha256": "00ca77ffa326366642f7f54edaad864952c3ca6cd664649b36c51e4d7a047ecb"
+    },
+    {
+      "path": "images/ai4s/localization-1000.webp",
+      "bytes": 33170,
+      "sha256": "304b3d97c506fef4214c79fa86e86cabcc60b2ac0bd36d3cc89774cbf59c0cde"
+    },
+    {
+      "path": "images/ai4s/pined-net-1000.webp",
+      "bytes": 36098,
+      "sha256": "c183b287668770659aece50480b348acb751b4290da59fe94b40c75f52ed494f"
     }
   ]
 }
