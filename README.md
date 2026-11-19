@@ -75,6 +75,14 @@ not use `!important`.
 4. Preview locally with `python -m http.server` in this folder (pages use
    root-relative paths like `/fonts/...`, so opening the files directly will not load all styles).
 
-## 2026-10-27 local integration candidate
+## Release records and checks
 
-This snapshot adds the bilingual AI4S × S4AI topic and refines scientific interactions. It is not yet committed or published. See [upgrade checklist](UPGRADE-CHECKLIST.md), [changelog](CHANGELOG.md), and [GitHub preparation](PUSH-README.md). Run `node scripts/verify.cjs` to verify this snapshot.
+The bilingual AI4S × S4AI topic and the refined scientific interactions were
+published to `main` on 2026-10-27. See the [changelog](CHANGELOG.md), the
+[upgrade checklist](UPGRADE-CHECKLIST.md) and the [GitHub notes](PUSH-README.md).
+
+- `node scripts/verify.cjs` checks file hashes against `RELEASE-MANIFEST.json`,
+  local links, bilingual topic metadata, publication associations, the numerical
+  models and JavaScript syntax. It only prints results.
+- `node scripts/verify.cjs --write` also refreshes `RELEASE-MANIFEST.json` and
+  `VALIDATION.json`. Run it after editing site files and commit both.

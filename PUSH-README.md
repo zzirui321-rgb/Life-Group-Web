@@ -2,7 +2,11 @@
 
 本目录是最新整合版的独立仓库副本，网站文件直接位于仓库根目录。HTML/CSS/JS 就是维护源文件，无需 npm install 或构建。不要用旧 site-source 重建。
 
-## 当前状态
+## 2026-11-19 状态更新
+
+10 月 27 日的整合版已合入 main 并通过 GitHub Pages 发布（fbfc446）。下文“当前状态”“后续提交与推送”描述的是当时交付包的情况，仅作历史记录保留；现在的维护方式见 README.md，直接在 main 上维护。`node scripts/verify.cjs` 只做检查，`--write` 才会更新 RELEASE-MANIFEST.json 和 VALIDATION.json。
+
+## 当前状态（2026-10-27 交付时）
 
 - 基线提交：35348ae3798ff2518227922a44c5c327306b8893。
 - 当前分支：website-upgrade-20261027。

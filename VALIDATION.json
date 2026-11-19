@@ -1,11 +1,11 @@
 {
-  "verifiedAt": "2026-10-26T18:20:20.912Z",
-  "branch": "website-upgrade-20261027",
+  "verifiedAt": "2026-11-19T13:56:41.811Z",
+  "branch": "main",
   "checks": [
     {
       "name": "website-manifest",
       "passed": true,
-      "files": 92
+      "files": 100
     },
     {
       "name": "excluded-private-and-temporary-files",
@@ -39,7 +39,7 @@
     {
       "name": "javascript-syntax",
       "passed": true,
-      "files": 8
+      "files": 9
     },
     {
       "name": "git-diff-whitespace",
@@ -51,19 +51,11 @@
     }
   ],
   "allPassed": true,
-  "browserCoverage": "2026-10-27 review: desktop Chinese AI4S layout; mobile English AI4S and Chinese research layouts; DMD reveal 4/6/10 and reset 0; mode selection; omega-gap frequency selector; time-soliton animation. No horizontal overflow in sampled topic layouts; no captured browser errors/warnings. Not a full-site interaction regression.",
+  "scope": "Automated file, link, metadata, numerical-model and syntax checks only.",
   "notPerformed": [
-    "deployment",
-    "complete all-page interaction regression",
+    "browser layout and interaction regression",
     "physical touch hardware test",
     "OS reduced-motion preference test",
     "external link revalidation"
-  ],
-  "review": {
-    "date": "2026-10-27",
-    "remoteBase": "35348ae3798ff2518227922a44c5c327306b8893",
-    "remoteFetched": true,
-    "blockingFindings": 0,
-    "delivery": "Pre-commit review; intended destination website-upgrade-20261027. Git history and remote branch are authoritative for commit/push status."
-  }
+  ]
 }

@@ -1,5 +1,12 @@
 # LiFE 官网改动日志
 
+## 2026 年 11 月 19 日 维护整理
+
+- 研究方向页的实验链路图 research-overview.webp 由 3532×1852（547 KB）缩为 1760×923（84 KB），中英文页面的宽高属性同步更新。
+- 删除没有页面引用的 images/original-4.webp。
+- scripts/verify.cjs 默认只检查不写文件；加 `--write` 时才重新生成 RELEASE-MANIFEST.json 和 VALIDATION.json。
+- README.md、PUSH-README.md 更正为已发布状态。
+
 ## 未发布整合版 2026 年 10 月 27 日
 
 本地整合范围为 2026-10-26 至 2026-10-27，基于 main 的 35348ae。当前交付的是独立分支 website-upgrade-20261027 的工作区，尚未创建新提交或推送。各轮记录按执行顺序排列；最终行为以升级清单和最后一轮记录为准。

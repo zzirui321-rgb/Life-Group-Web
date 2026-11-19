@@ -1,8 +1,8 @@
 {
-  "date": "2026-10-27",
-  "baseCommit": "35348ae3798ff2518227922a44c5c327306b8893",
-  "source": "Life-Group-Web-Claude",
-  "scope": "Website files copied from the integrated working tree; README additionally links release documents. Git metadata and delivery documents/scripts are outside this manifest.",
+  "date": "2026-11-19",
+  "baseCommit": "fbfc446f46bcdba27f0b0bae9376506c6f9d8cd9",
+  "source": "Life-Group-Web main",
+  "scope": "Published website files in the repository root. Delivery documents, scripts and Git metadata are outside this manifest.",
   "files": [
     {
       "path": ".gitignore",
@@ -26,8 +26,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3942,
-      "sha256": "e7c9230d23c15091bdc9d145ef93d3bba16a396f24235142a321dbac4b03bf61"
+      "bytes": 4233,
+      "sha256": "e317486d8d5a10003a35a20d34a92598816d0f181b10241c04f1de60a4d0a459"
     },
     {
       "path": "ai4s.html",
@@ -146,8 +146,8 @@
     },
     {
       "path": "en/research.html",
-      "bytes": 14822,
-      "sha256": "b3ca1f85a56699f16e0f838dd752814d893257c8c72fdc60c234126465432c12"
+      "bytes": 14821,
+      "sha256": "f31f29e8267ab100f68a9b3c47bdf9f918a8d3923c2be38e3d01f40ac96e8eb5"
     },
     {
       "path": "favicon-32.png",
@@ -185,6 +185,11 @@
       "sha256": "0dd251e3aa3f953b64d8aa3491f9773452bff1f9e0bf523efbe08f314ca9eb5a"
     },
     {
+      "path": "hero-sidebands.js",
+      "bytes": 3395,
+      "sha256": "763790ee14cf61b1c4852758aa1ee9a51324facfe6d1e3dbe3d877e1ecf36612"
+    },
+    {
       "path": "icon-192.png",
       "bytes": 10390,
       "sha256": "9f4e8c6bf92a623e783f94ef92e990f9d38dbd326bcb0d59b9e0362f407b40e9"
@@ -193,6 +198,16 @@
       "path": "icon-512.png",
       "bytes": 18557,
       "sha256": "2705d86f1cb8b206972607b10702e86d2d7dee7a62c775eaeee745e0c608d6f3"
+    },
+    {
+      "path": "images/ai4s/deeponet-1000.webp",
+      "bytes": 32110,
+      "sha256": "76563bbe87f564cc34300e176261e1fa141f7fe47f3fa42e43979371a05b7526"
+    },
+    {
+      "path": "images/ai4s/deeponet-600.webp",
+      "bytes": 14496,
+      "sha256": "a47516cfeab059d357f6ba1979181a40c223dc0364890441b48589e663568a38"
     },
     {
       "path": "images/ai4s/deeponet-paper-figure.webp",
@@ -205,6 +220,16 @@
       "sha256": "b482ef8f1edd50cb372c9cf8e5ab254b64068cee444b35d2e48a58afe7b0f475"
     },
     {
+      "path": "images/ai4s/dmd-overview-1000.webp",
+      "bytes": 41480,
+      "sha256": "00ca77ffa326366642f7f54edaad864952c3ca6cd664649b36c51e4d7a047ecb"
+    },
+    {
+      "path": "images/ai4s/dmd-overview-600.webp",
+      "bytes": 19410,
+      "sha256": "7e895c4dc26f297a5c33ae40f5fcf18c067bf2433cb6180c3191f3a3e3ebdd9b"
+    },
+    {
       "path": "images/ai4s/dmd-overview-v2.webp",
       "bytes": 237686,
       "sha256": "54961cf6bbc031ff40fa198192f9fa5f5b15b08908d3d339bedbc7d8cc252ec8"
@@ -215,6 +240,16 @@
       "sha256": "4cd200b32ac147b7d880290084fbe514c40dee7db273d472b69182ca71582c9f"
     },
     {
+      "path": "images/ai4s/localization-1000.webp",
+      "bytes": 33170,
+      "sha256": "304b3d97c506fef4214c79fa86e86cabcc60b2ac0bd36d3cc89774cbf59c0cde"
+    },
+    {
+      "path": "images/ai4s/localization-600.webp",
+      "bytes": 17660,
+      "sha256": "d04b299253b254db1f1951927567777a7233c604082bb90cf6de1f8643c59471"
+    },
+    {
       "path": "images/ai4s/localization-paper-figure.webp",
       "bytes": 301574,
       "sha256": "b2b6688c0c07a11e1c665ccec026c81cd0c33b6fe0b4418e0b095366e81b8bc8"
@@ -223,6 +258,16 @@
       "path": "images/ai4s/localization.webp",
       "bytes": 99016,
       "sha256": "b9ee5c9bc7b9a2cf8cb3526207ae5ec0cd3724c527994debf9b94a8a1c627b15"
+    },
+    {
+      "path": "images/ai4s/pined-net-1000.webp",
+      "bytes": 36098,
+      "sha256": "c183b287668770659aece50480b348acb751b4290da59fe94b40c75f52ed494f"
+    },
+    {
+      "path": "images/ai4s/pined-net-600.webp",
+      "bytes": 16992,
+      "sha256": "495d2fe828163eb38ccb49cb74ba40424c3f53dfc1db07b1efa1b80922702e11"
     },
     {
       "path": "images/ai4s/pined-net.webp",
@@ -295,11 +340,6 @@
       "sha256": "11ed33ea5149556e2b04e8fd71264f8b048d1b9d67fd26820dd5bf1304ff729c"
     },
     {
-      "path": "images/original-4.webp",
-      "bytes": 19296,
-      "sha256": "315f64c36b0416942536e377822165137e6f7cd8c5c68313d44fb43cab601c19"
-    },
-    {
       "path": "images/original-5.webp",
       "bytes": 70692,
       "sha256": "99c0a5c11737a0a116dd2f3f25ba90c242e036ade3eb94ff5e23822aa27aedfe"
@@ -326,8 +366,8 @@
     },
     {
       "path": "images/research-overview.webp",
-      "bytes": 560352,
-      "sha256": "64a3e7f04bc41a11b4960fa0ff66c69051f58544c50d2f6ca6a3400c0bdafa52"
+      "bytes": 86256,
+      "sha256": "eec85a32ee6e326a566d0364ea51bd742d56e152bd62a53cd409d9064d1ae8aa"
     },
     {
       "path": "images/yiming-pan.webp",
@@ -436,8 +476,8 @@
     },
     {
       "path": "research.html",
-      "bytes": 13689,
-      "sha256": "6a7a88cec7d2706af153b8ffab2e952f960f29cde58ee117aba74961caf9bbdc"
+      "bytes": 13688,
+      "sha256": "3bd4e8d16375277153421aa629995940f0b7f4912285dc41c7362b00bf33f76c"
     },
     {
       "path": "robots.txt",
@@ -457,57 +497,12 @@
     {
       "path": "sitemap.xml",
       "bytes": 4272,
-      "sha256": "00c41a440d4bbbbb5289019073fa491e35f1605ff7250a985306ad2b399441ce"
+      "sha256": "3fe476d282437498b4569b521df88ed3224ea07b5d0db0ffdf6d09320589f66a"
     },
     {
       "path": "soliton-model.js",
       "bytes": 3203,
       "sha256": "2609e7d5e33950af8bef9c8e437a5ae8919246e13502d98bd0edb69e3b9e06ad"
-    },
-    {
-      "path": "hero-sidebands.js",
-      "bytes": 3395,
-      "sha256": "763790ee14cf61b1c4852758aa1ee9a51324facfe6d1e3dbe3d877e1ecf36612"
-    },
-    {
-      "path": "images/ai4s/deeponet-600.webp",
-      "bytes": 14496,
-      "sha256": "a47516cfeab059d357f6ba1979181a40c223dc0364890441b48589e663568a38"
-    },
-    {
-      "path": "images/ai4s/dmd-overview-600.webp",
-      "bytes": 19410,
-      "sha256": "7e895c4dc26f297a5c33ae40f5fcf18c067bf2433cb6180c3191f3a3e3ebdd9b"
-    },
-    {
-      "path": "images/ai4s/localization-600.webp",
-      "bytes": 17660,
-      "sha256": "d04b299253b254db1f1951927567777a7233c604082bb90cf6de1f8643c59471"
-    },
-    {
-      "path": "images/ai4s/pined-net-600.webp",
-      "bytes": 16992,
-      "sha256": "495d2fe828163eb38ccb49cb74ba40424c3f53dfc1db07b1efa1b80922702e11"
-    },
-    {
-      "path": "images/ai4s/deeponet-1000.webp",
-      "bytes": 32110,
-      "sha256": "76563bbe87f564cc34300e176261e1fa141f7fe47f3fa42e43979371a05b7526"
-    },
-    {
-      "path": "images/ai4s/dmd-overview-1000.webp",
-      "bytes": 41480,
-      "sha256": "00ca77ffa326366642f7f54edaad864952c3ca6cd664649b36c51e4d7a047ecb"
-    },
-    {
-      "path": "images/ai4s/localization-1000.webp",
-      "bytes": 33170,
-      "sha256": "304b3d97c506fef4214c79fa86e86cabcc60b2ac0bd36d3cc89774cbf59c0cde"
-    },
-    {
-      "path": "images/ai4s/pined-net-1000.webp",
-      "bytes": 36098,
-      "sha256": "c183b287668770659aece50480b348acb751b4290da59fe94b40c75f52ed494f"
     }
   ]
 }
