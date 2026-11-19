@@ -12,6 +12,7 @@
    - concepts     three electron–light processes (research page)
    - floquet      driven two-band system: quasienergies + Rabi dynamics (interests page)
    - soliton      event / k-gap / Bragg formation from a numerical envelope model
+   - qgt          Lorentz-boosted quantum metric of a 1D Dirac model (research page)
    ========================================================================== */
 (() => {
   const EN = document.documentElement.lang.startsWith('en');
@@ -1112,7 +1113,60 @@
   }
 
 
-  const BUILDERS = { setup: buildSetup, kgap: buildKgap, anomaly: buildAnomaly, measurement: buildMeasurement, concepts: buildConcepts, floquet: buildFloquet, soliton:buildSoliton };
+  /* ======================================================================
+     8. Lorentz-boosted quantum metric of the 1D massive Dirac model
+     H = k'σx + mσz. At ω = 0 and c = 1 the boosted momentum is k' = γk, and
+       g_xx = γ²m² / 4E'⁴,  g_ωω = β²g_xx,  g_ωx = −βg_xx,  E'² = γ²k² + m²
+     (arXiv:2611.16967, Eq. 8). The difference g_xx − g_ωω is boost invariant.
+     ====================================================================== */
+  function buildQgt(fig, cx) {
+    const M = 0.8, K = 2.5, YMIN = -1.35, YMAX = 1.6;
+    const W = cx ? 420 : 760, H = cx ? 320 : 300, x0 = cx ? 52 : 60, y0 = 16, pw = W - x0 - 18, ph = H - y0 - 52;
+    const svg = svgRoot(W, H, T('Lorentz boost 后的量子度规分量', 'Quantum-metric components after a Lorentz boost'));
+    const { sx, sy } = plotArea(svg, { x0, y0, w: pw, hgt: ph, xr: [-K, K], yr: [YMIN, YMAX] });
+    for (const v of [-1, -0.5, 0.5, 1, 1.5]) svg.append(s('line', { x1: x0, x2: x0 + pw, y1: sy(v), y2: sy(v), class: 'ifig-grid' }));
+    for (const v of [-1, 0, 1]) svg.append(s('text', { x: x0 - 8, y: sy(v) + 5, 'text-anchor': 'end', class: 'ifig-tick', text: v < 0 ? '−1' : String(v) }));
+    svg.append(s('line', { x1: x0, x2: x0 + pw, y1: sy(0), y2: sy(0), class: 'ifig-axis' }));
+    for (const v of [-2, -1, 0, 1, 2]) svg.append(s('text', { x: sx(v), y: y0 + ph + 20, 'text-anchor': 'middle', class: 'ifig-tick', text: v < 0 ? '−' + -v : String(v) }));
+    svg.append(s('text', { x: x0 + pw, y: y0 + ph + 44, 'text-anchor': 'end', class: 'ifig-cap', text: T('动量 kₓ（ω = 0）', 'momentum kₓ (ω = 0)') }));
+    const rest = s('path', { class: 'ifig-light' }), gxx = s('path', { class: 'ifig-total' });
+    const gww = s('path', { class: 'ifig-comp up' }), gwx = s('path', { class: 'ifig-comp dn' });
+    svg.append(rest, gww, gwx, gxx);
+    const ks = linspace(-K, K, cx ? 161 : 241);
+    const metric = (k, gamma2) => gamma2 * M * M / (4 * (gamma2 * k * k + M * M) ** 2);
+    rest.setAttribute('d', pathOf(ks.map((k) => [sx(k), sy(metric(k, 1))])));
+    const readout = h('p', { class: 'ifig-desc' });
+    const sl = slider({
+      label: T('参考系速度 β = v/c', 'frame velocity β = v/c'), min: 0, max: 0.85, step: 0.01, value: 0.75, format: (v) => v.toFixed(2),
+      oninput: (beta) => {
+        const gamma2 = 1 / (1 - beta * beta);
+        gxx.setAttribute('d', pathOf(ks.map((k) => [sx(k), sy(metric(k, gamma2))])));
+        gww.setAttribute('d', pathOf(ks.map((k) => [sx(k), sy(beta * beta * metric(k, gamma2))])));
+        gwx.setAttribute('d', pathOf(ks.map((k) => [sx(k), sy(-beta * metric(k, gamma2))])));
+        const peak = metric(0, gamma2);
+        readout.replaceChildren(
+          h('strong', { text: `γ² = ${gamma2.toFixed(2)}` }),
+          T(`　峰值：g_xx = ${fmt(peak)}，g_ωω = ${fmt(beta * beta * peak)}，g_ωx = ${fmt(-beta * peak).replace('-', '−')}；`, `  Peaks: g_xx = ${fmt(peak)}, g_ωω = ${fmt(beta * beta * peak)}, g_ωx = ${fmt(-beta * peak).replace('-', '−')}; `),
+          T(`峰值处 g_xx − g_ωω = ${fmt((1 - beta * beta) * peak)}，不随 β 改变。`, `at the peak g_xx − g_ωω = ${fmt((1 - beta * beta) * peak)}, independent of β.`));
+      },
+    });
+    const legend = h('div', { class: 'ifig-legend' },
+      h('span', {}, h('i', { class: 'k-light' }), T('静止参考系 g′_xx', 'rest frame g′_xx')),
+      h('span', {}, h('i', { class: 'k-total' }), T('纵向度规 g_xx', 'longitudinal metric g_xx')),
+      h('span', {}, h('i', { class: 'k-up' }), T('频率度规 g_ωω', 'frequency metric g_ωω')),
+      h('span', {}, h('i', { class: 'k-dn' }), T('交叉度规 g_ωx', 'cross metric g_ωx')));
+    const card = h('div', { class: 'ifig-card' },
+      h('div', { class: 'ifig-subhead' },
+        h('strong', { text: T('一维有质量 Dirac 模型的量子度规', 'Quantum metric of the 1D massive Dirac model') }),
+        h('span', { class: 'ifig-formula', text: 'g_xx − g_ωω = m² / 4E′⁴' })),
+      h('div', { class: 'ifig-controls' }, sl.wrap), h('div', { class: 'ifig-plot' }, svg), legend, readout,
+      h('p', { class: 'ifig-note', text: T('模型：H = k′σₓ + mσ_z，m = 0.8，取 ω = 0、c = 1；曲线按 arXiv:2611.16967 的式 (8) 计算。β = 0.75 对应论文图 2(a)。', 'Model: H = k′σₓ + mσ_z with m = 0.8, ω = 0 and c = 1; curves follow Eq. (8) of arXiv:2611.16967. β = 0.75 corresponds to Fig. 2(a) of the paper.') }));
+    fig.prepend(card);
+    sl.update();
+    return card;
+  }
+
+  const BUILDERS = { setup: buildSetup, kgap: buildKgap, anomaly: buildAnomaly, measurement: buildMeasurement, concepts: buildConcepts, floquet: buildFloquet, soliton:buildSoliton, qgt: buildQgt };
   const COMPACT = 560;
   const init = () => {
     document.querySelectorAll('figure[data-ifig]').forEach((fig) => {

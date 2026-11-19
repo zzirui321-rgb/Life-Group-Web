@@ -151,3 +151,14 @@
   measure();
   update();
 })();
+
+if ('IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  const observer = new IntersectionObserver(entries => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue;
+      entry.target.classList.add('section-enter');
+      observer.unobserve(entry.target);
+    }
+  });
+  document.querySelectorAll('main section.section').forEach(section => observer.observe(section));
+}

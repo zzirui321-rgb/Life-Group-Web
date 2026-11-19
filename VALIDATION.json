@@ -1,11 +1,11 @@
 {
-  "verifiedAt": "2026-11-19T13:56:41.811Z",
+  "verifiedAt": "2026-11-19T15:23:28.256Z",
   "branch": "main",
   "checks": [
     {
       "name": "website-manifest",
       "passed": true,
-      "files": 100
+      "files": 102
     },
     {
       "name": "excluded-private-and-temporary-files",
@@ -24,7 +24,7 @@
     {
       "name": "check-associations.cjs",
       "passed": true,
-      "output": "PASS: bilingual Jinze 2 published + 2 preprints; global associations match; Pan 53 + 14; banners linked once."
+      "output": "PASS: bilingual Jinze 2 published + 2 preprints; global associations match; Pan 54 + 19; banners linked once."
     },
     {
       "name": "check-soliton.cjs",
@@ -39,7 +39,7 @@
     {
       "name": "javascript-syntax",
       "passed": true,
-      "files": 9
+      "files": 10
     },
     {
       "name": "git-diff-whitespace",

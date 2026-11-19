@@ -1,0 +1,36 @@
+.publication-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) repeat(2, minmax(0, 1fr)) auto;
+  align-items: end;
+  gap: 12px 16px;
+  margin-top: 30px;
+  padding-block: 20px;
+  border-block: 1px solid var(--color-line);
+}
+.publication-filters label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--color-ink);
+}
+.publication-filters :is(input, select, button) {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 42px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  color: var(--color-ink);
+  padding: 7px 10px;
+  font: inherit;
+  font-size: 16px;
+}
+.publication-filters button { cursor: pointer; }
+.publication-filters output { grid-column: 1 / -1; font-size: 13px; color: var(--color-text-muted); }
+main :is(.publication-filters, .section, .paper, .archive-year, li, .text-link)[hidden] { display: none; }
+@media (max-width: 760px) {
+  .publication-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .publication-filters label:first-child { grid-column: 1 / -1; }
+  .publication-filters button { justify-self: start; }
+  .publication-filters output { grid-column: auto; align-self: center; text-align: end; }
+}
